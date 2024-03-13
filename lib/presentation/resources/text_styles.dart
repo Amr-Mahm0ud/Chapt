@@ -1,5 +1,5 @@
-import 'package:chapt/presentation/color_manager.dart';
-import 'package:chapt/presentation/font_manager.dart';
+import 'package:chapt/presentation/resources/color_manager.dart';
+import 'package:chapt/presentation/resources/font_manager.dart';
 import 'package:flutter/material.dart';
 
 // general text style
