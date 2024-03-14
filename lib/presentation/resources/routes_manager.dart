@@ -1,8 +1,9 @@
 import 'package:chapt/presentation/home/home.dart';
-import 'package:chapt/presentation/onboarding/onboarding_screen.dart';
-import 'package:chapt/presentation/signin/signin.dart';
-import 'package:chapt/presentation/signup/signup.dart';
-import 'package:chapt/presentation/splash/splash_screen.dart';
+import '../onboarding/onboarding_screen.dart';
+import '../resources/app_strings.dart';
+import '../signin/signin.dart';
+import '../signup/signup.dart';
+import '../splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
@@ -33,9 +34,9 @@ class RouteGenerator {
 
   static Route<dynamic> undifinedRoute() {
     return MaterialPageRoute(
-        builder: (_) => Scaffold(
-              body: const Center(
-                child: Text('not Found'),
+        builder: (_) => const Scaffold(
+              body: Center(
+                child: Text(AppStrings.noRoute),
               ),
             ));
   }
