@@ -1,9 +1,9 @@
-import 'package:chapt/presentation/home/home.dart';
-import '../onboarding/onboarding_screen.dart';
+import 'package:chapt/presentation/screens/home/home.dart';
+import '../screens/onboarding/onboarding_screen.dart';
 import '../resources/app_strings.dart';
-import '../signin/signin.dart';
-import '../signup/signup.dart';
-import '../splash/splash_screen.dart';
+import '../screens/signin/signin.dart';
+import '../screens/signup/signup.dart';
+import '../screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {

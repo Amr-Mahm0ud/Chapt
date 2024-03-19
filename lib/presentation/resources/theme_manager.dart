@@ -29,13 +29,14 @@ ThemeData getAppTheme() {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: ColorManager.primary,
+        foregroundColor: ColorManager.backglight,
         shape: const StadiumBorder(),
         textStyle: getRegularText(
           color: ColorManager.backglight,
         ),
         padding: const EdgeInsets.symmetric(
-          horizontal: AppPadding.p25,
-          vertical: AppPadding.p5,
+          horizontal: AppPadding.p30,
+          vertical: AppPadding.p10,
         ),
       ),
     ),
@@ -44,7 +45,7 @@ ThemeData getAppTheme() {
       headlineLarge: getBoldText(color: ColorManager.backglight),
       headlineMedium: getSemiBoldText(color: ColorManager.greyColordark),
       bodyLarge: getRegularText(color: ColorManager.backglight),
-      bodyMedium: getRegularText(color: ColorManager.greyColordark),
+      bodyMedium: getLightText(color: ColorManager.greyColordark),
     ),
   );
 }
