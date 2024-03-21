@@ -101,7 +101,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   _pageController.animateToPage(
                                       _viewModel.goNext(),
                                       duration: const Duration(
-                                          milliseconds: AppValues.i500),
+                                          milliseconds: AppValues.i300),
                                       curve: AppValues.linear);
                                 },
                                 content: const Text(AppStrings.next),

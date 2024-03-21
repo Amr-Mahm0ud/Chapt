@@ -21,7 +21,7 @@ class AppValues {
   static const int i2 = 2;
   static const int i3 = 2;
 
-  static const int i500 = 500;
+  static const int i300 = 300;
 
   static const Curve linear = Curves.linear;
 
