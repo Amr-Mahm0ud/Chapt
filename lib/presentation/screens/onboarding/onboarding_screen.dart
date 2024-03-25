@@ -1,4 +1,4 @@
-import 'package:chapt/domain/models.dart';
+import 'package:chapt/domain/models/models.dart';
 import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/resources/routes_manager.dart';
 import 'package:chapt/presentation/resources/values_manager.dart';

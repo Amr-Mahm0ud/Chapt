@@ -1,6 +1,6 @@
 import 'package:chapt/app/extentions.dart';
 import 'package:chapt/data/response/responses.dart';
-import 'package:chapt/domain/models.dart';
+import 'package:chapt/domain/models/models.dart';
 
 extension UserResponsesMapper on UserResponses {
   UserModel toDomain() {
