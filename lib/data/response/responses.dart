@@ -27,7 +27,7 @@ class UserResponses {
 @JsonSerializable()
 class ContactsResponses {
   @JsonKey(name: 'phone')
-  int? phone;
+  String? phone;
   @JsonKey(name: 'email')
   String? email;
   ContactsResponses(this.phone, this.email);
