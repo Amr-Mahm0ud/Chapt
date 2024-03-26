@@ -1,10 +1,10 @@
 import 'package:chapt/app/app_constants.dart';
 import 'package:chapt/data/data_source/remote_data_source.dart';
 import 'package:chapt/data/mappers/mappers.dart';
-import 'package:chapt/data/network/error_handler.dart';
-import 'package:chapt/data/network/failure.dart';
+import 'package:chapt/data/network/errors/error_handler.dart';
+import 'package:chapt/data/network/errors/failure.dart';
 import 'package:chapt/data/network/network_state.dart';
-import 'package:chapt/data/network/requests.dart';
+import 'package:chapt/data/network/api/requests.dart';
 import 'package:chapt/domain/models/models.dart';
 import 'package:chapt/domain/repository/repository.dart';
 import 'package:dartz/dartz.dart';

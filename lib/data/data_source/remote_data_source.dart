@@ -1,5 +1,5 @@
-import 'package:chapt/data/network/app_api.dart';
-import 'package:chapt/data/network/requests.dart';
+import 'package:chapt/data/network/api/app_api.dart';
+import 'package:chapt/data/network/api/requests.dart';
 import 'package:chapt/data/response/responses.dart';
 
 abstract class RemoteDataSource {

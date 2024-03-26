@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:chapt/data/network/failure.dart';
+import 'package:chapt/data/network/errors/failure.dart';
 import 'package:dio/dio.dart';
 
 class ErrorHandler implements Exception {

@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../response/responses.dart';
+import '../../response/responses.dart';
 part 'app_api.g.dart';
 
 @RestApi(baseUrl: AppConstants.baseUrl)
