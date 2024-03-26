@@ -1,5 +1,7 @@
+import 'package:chapt/app/app_constants.dart';
 import 'package:chapt/data/data_source/remote_data_source.dart';
 import 'package:chapt/data/mappers/mappers.dart';
+import 'package:chapt/data/network/error_handler.dart';
 import 'package:chapt/data/network/failure.dart';
 import 'package:chapt/data/network/network_state.dart';
 import 'package:chapt/data/network/requests.dart';
@@ -19,22 +21,23 @@ class RepositoryImp implements Repositry {
       // user's deviece is connected
       // so we complete the login request
 
-      final response = await _remoteDataSourceImp.login(loginRequest);
+      try {
+        final response = await _remoteDataSourceImp.login(loginRequest);
 
-      // In mockApi we made the success response code equal 0
-      if (response.status == 0) {
-        // successful request
-
-        return Right(response.toDomain());
-      } else {
-        // error from api
-        // TODO: implement failure here
-        return Left(Failure(409, response.message ?? 'Bussiness error'));
+        // In mockApi we made the success response code equal 0
+        if (response.status == AppConstants.zero) {
+          // successful request
+          return Right(response.toDomain());
+        } else {
+          // error from api
+          return Left(ErrorType.DEFAULT.getFailure());
+        }
+      } catch (exception) {
+        return Left(ErrorHandler.handle(exception).failure);
       }
     } else {
       // network error
-      // TODO: implement network failure
-      return Left(Failure(501, 'Check your internet connection'));
+      return Left(ErrorType.NO_INTERNET_CONNECTION.getFailure());
     }
   }
 }
