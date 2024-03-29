@@ -35,7 +35,7 @@ TextStyle getSemiBoldText(
 
 // bold text style
 TextStyle getBoldText(
-    {double size = FontSizeManager.s26,
+    {double size = FontSizeManager.s30,
     Color color = ColorManager.backglight}) {
   return _getTextStyle(size, color, FontWieghtManager.bold);
 }

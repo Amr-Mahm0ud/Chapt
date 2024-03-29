@@ -35,8 +35,8 @@ ThemeData getAppTheme() {
           color: ColorManager.backglight,
         ),
         padding: const EdgeInsets.symmetric(
-          horizontal: AppPadding.p30,
-          vertical: AppPadding.p10,
+          horizontal: AppPadding.p40,
+          vertical: AppPadding.p15,
         ),
       ),
     ),

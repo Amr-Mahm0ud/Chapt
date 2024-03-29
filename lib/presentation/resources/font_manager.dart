@@ -16,5 +16,5 @@ class FontSizeManager {
   static const double s18 = 18.0;
   static const double s21 = 21.0;
   static const double s24 = 24.0;
-  static const double s26 = 26.0;
+  static const double s30 = 30.0;
 }

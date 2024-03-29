@@ -6,13 +6,20 @@ import 'package:dartz/dartz.dart';
 
 import '../../data/network/api/requests.dart';
 
-class LoginUseCase implements BaseUseCase<LoginRequest, AuthenticationModel> {
-  Repositry _repositry;
+class LoginUseCase
+    implements BaseUseCase<LoginUseCaseInput, AuthenticationModel> {
+  final Repositry _repositry;
   LoginUseCase(this._repositry);
 
   @override
   Future<Either<Failure, AuthenticationModel>> excute(
-      LoginRequest input) async {
-    return await _repositry.login(input);
+      LoginUseCaseInput input) async {
+    return await _repositry.login(LoginRequest(input.email, input.pass));
   }
+}
+
+class LoginUseCaseInput {
+  String email;
+  String pass;
+  LoginUseCaseInput(this.email, this.pass);
 }

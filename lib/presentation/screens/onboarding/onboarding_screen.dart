@@ -95,6 +95,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 },
                                 content: const Text(AppStrings.skip),
                                 color: Theme.of(context).colorScheme.secondary,
+                                rounded: true,
                               ),
                               AppButton(
                                 action: () {
@@ -105,6 +106,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                       curve: AppValues.linear);
                                 },
                                 content: const Text(AppStrings.next),
+                                rounded: true,
                               ),
                             ],
                           )
@@ -114,6 +116,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                   context, Routes.signup);
                             },
                             content: const Text(AppStrings.cont),
+                            rounded: true,
                           ),
                   ),
                 ],
