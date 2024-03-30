@@ -1,3 +1,4 @@
+import 'package:chapt/app/dependency_injection.dart';
 import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/resources/routes_manager.dart';
 import 'package:chapt/presentation/resources/values_manager.dart';
@@ -16,7 +17,7 @@ class Signin extends StatefulWidget {
 }
 
 class _SigninState extends State<Signin> {
-  final SigninViewModel _viewModel = SigninViewModel();
+  final SigninViewModel _viewModel = instance<SigninViewModel>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 

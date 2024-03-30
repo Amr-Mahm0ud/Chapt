@@ -1,4 +1,5 @@
 import 'package:chapt/presentation/screens/home/home.dart';
+import '../../app/dependency_injection.dart';
 import '../screens/onboarding/onboarding_screen.dart';
 import '../resources/app_strings.dart';
 import '../screens/signin/signin.dart';
@@ -22,6 +23,7 @@ class RouteGenerator {
       case Routes.onboarding:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
       case Routes.signin:
+        initLoginModule();
         return MaterialPageRoute(builder: (_) => const Signin());
       case Routes.signup:
         return MaterialPageRoute(builder: (_) => const Signup());

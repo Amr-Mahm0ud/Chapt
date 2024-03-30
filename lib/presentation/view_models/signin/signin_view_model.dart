@@ -5,13 +5,14 @@ import 'package:chapt/presentation/common/freezed_data_classes.dart';
 import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/view_models/base/base_view_model.dart';
 
+import '../../../domain/use_case/login_use_case.dart';
+
 class SigninViewModel extends BaseViewModel
     implements SigninViewModelInputs, SigninViewModelOutputs {
-  // final LoginUseCase _loginUseCase;
+  final LoginUseCase _loginUseCase;
 
-  //constructor
-  // SigninViewModel(this._loginUseCase);
-  SigninViewModel();
+  // constructor
+  SigninViewModel(this._loginUseCase);
 
   //variables
   final StreamController<String> _emailStreamController =
@@ -43,10 +44,10 @@ class SigninViewModel extends BaseViewModel
   //functions
   @override
   login() async {
-    // (await _loginUseCase.excute(
-    //   LoginUseCaseInput(loginObject.email, loginObject.pass),
-    // ))
-    //     .fold((failure) => {}, (data) => {});
+    (await _loginUseCase.excute(
+      LoginUseCaseInput(loginObject.email, loginObject.pass),
+    ))
+        .fold((failure) => {}, (data) => {});
   }
 
   @override
