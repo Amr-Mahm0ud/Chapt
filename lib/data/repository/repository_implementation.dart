@@ -10,8 +10,8 @@ import 'package:chapt/domain/repository/repository.dart';
 import 'package:dartz/dartz.dart';
 
 class RepositoryImp implements Repositry {
-  final NetworkStateImp _networkStateImp;
-  final RemoteDataSourceImp _remoteDataSourceImp;
+  final NetworkState _networkStateImp;
+  final RemoteDataSource _remoteDataSourceImp;
   RepositoryImp(this._networkStateImp, this._remoteDataSourceImp);
 
   @override

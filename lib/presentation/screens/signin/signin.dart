@@ -131,7 +131,9 @@ class _SigninState extends State<Signin> {
                   builder: (context, snapshot) => AppButton(
                     action: snapshot.hasData
                         ? snapshot.data!
-                            ? () {}
+                            ? () async{
+                                await _viewModel.login();
+                              }
                             : null
                         : null,
                     content: const Text(AppStrings.signin),

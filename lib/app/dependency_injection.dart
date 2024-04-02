@@ -10,7 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
-final GetIt instance = GetIt.instance();
+final instance = GetIt.instance;
 
 Future<void> initAppModule() async {
   // Network Information
@@ -31,14 +31,14 @@ Future<void> initAppModule() async {
 
   //Repository
   instance.registerLazySingleton<Repositry>(() => RepositoryImp(
-      instance<NetworkStateImp>(), instance<RemoteDataSourceImp>()));
+      instance<NetworkState>(), instance<RemoteDataSource>()));
 }
 
 Future<void> initLoginModule() async {
-  if (!GetIt.I.isRegistered()) {
-    instance.registerLazySingleton<LoginUseCase>(
+  if (!GetIt.I.isRegistered<LoginUseCase>()) {
+    instance.registerFactory<LoginUseCase>(
         () => LoginUseCase(instance<Repositry>()));
-    instance.registerLazySingleton<SigninViewModel>(
+    instance.registerFactory<SigninViewModel>(
         () => SigninViewModel(instance<LoginUseCase>()));
   }
 }
