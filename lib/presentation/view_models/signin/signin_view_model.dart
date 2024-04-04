@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:chapt/app/app_constants.dart';
 import 'package:chapt/presentation/common/freezed_data_classes.dart';
+import 'package:chapt/presentation/common/popup_error.dart';
 import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/view_models/base/base_view_model.dart';
 
@@ -15,10 +16,13 @@ class SigninViewModel extends BaseViewModel
   SigninViewModel(this._loginUseCase);
 
   //variables
-  final StreamController<String> _emailStreamController =
-      StreamController<String>.broadcast();
-  final StreamController<String> _passStreamController =
-      StreamController<String>.broadcast();
+  final StreamController<String?> _emailStreamController =
+      StreamController<String?>.broadcast();
+  final StreamController<String?> _passStreamController =
+      StreamController<String?>.broadcast();
+  final StreamController<bool> _isLoadingStreamController =
+      StreamController<bool>.broadcast();
+
   LoginObject loginObject =
       LoginObject(AppConstants.emptyStr, AppConstants.emptyStr);
 
@@ -27,27 +31,39 @@ class SigninViewModel extends BaseViewModel
   void dispose() {
     _emailStreamController.close();
     _passStreamController.close();
+    _isLoadingStreamController.close();
   }
 
   @override
-  void start() {}
+  void start() {
+    inIsLoading.add(false);
+  }
 
 //*********************************************************** */
 
 //input view model
   @override
-  Sink<String> get inputEmail => _emailStreamController.sink;
+  Sink<String?> get inputEmail => _emailStreamController.sink;
 
   @override
-  Sink<String> get inputPass => _passStreamController.sink;
+  Sink<String?> get inputPass => _passStreamController.sink;
 
+  @override
+  Sink<bool> get inIsLoading => _isLoadingStreamController.sink;
   //functions
   @override
-  login() async {
+  login(context) async {
+    inIsLoading.add(true);
     (await _loginUseCase.excute(
       LoginUseCaseInput(loginObject.email, loginObject.pass),
     ))
-        .fold((failure) => {}, (data) => {});
+        .fold((failure) {
+      inIsLoading.add(false);
+      PopupError.showErrorDialog(context, failure.message);
+      return {};
+    }, (data) {
+      inIsLoading.add(false);
+    });
   }
 
   @override
@@ -66,27 +82,30 @@ class SigninViewModel extends BaseViewModel
 
   // outputs
   @override
-  Stream<String> get outEmail =>
-      _emailStreamController.stream.map((email) => _validateEmail(email));
+  Stream<String?> get outEmail =>
+      _emailStreamController.stream.map((email) => validateEmail(email ?? ''));
 
   @override
-  Stream<String> get outPass =>
-      _passStreamController.stream.map((pass) => _validatePass(pass));
+  Stream<String?> get outPass =>
+      _passStreamController.stream.map((pass) => validatePass(pass ?? ''));
+
+  @override
+  Stream<bool> get outIsLoading => _isLoadingStreamController.stream;
 
   //validation functions
-  String _validateEmail(email) {
-    if (email.isNotEmpty) {
-      return AppConstants.emptyStr;
-    } else {
+  String? validateEmail(String? email) {
+    if (email == null || email.trim().isEmpty) {
       return AppStrings.emailReq;
+    } else {
+      return null;
     }
   }
 
-  String _validatePass(String pass) {
-    if (pass.isNotEmpty) {
-      return AppConstants.emptyStr;
-    } else {
+  String? validatePass(String? pass) {
+    if (pass == null || pass.trim().isEmpty) {
       return AppStrings.passReq;
+    } else {
+      return null;
     }
   }
 }
@@ -94,13 +113,15 @@ class SigninViewModel extends BaseViewModel
 abstract class SigninViewModelInputs extends BaseViewModelInputs {
   void setEmail(String email);
   void setPass(String pass);
-  login() {}
+  login(context) {}
 
-  Sink<String> get inputEmail;
-  Sink<String> get inputPass;
+  Sink<String?> get inputEmail;
+  Sink<String?> get inputPass;
+  Sink<bool> get inIsLoading;
 }
 
 abstract class SigninViewModelOutputs extends BaseViewModelOutputs {
-  Stream<String> get outEmail;
-  Stream<String> get outPass;
+  Stream<String?> get outEmail;
+  Stream<String?> get outPass;
+  Stream<bool> get outIsLoading;
 }

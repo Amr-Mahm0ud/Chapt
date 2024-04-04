@@ -7,6 +7,7 @@ TextFormField AppInputField({
   type = TextInputType.name,
   required icon,
   required controller,
+  validator,
   bool obscure = false,
   errorText,
   Widget? action,
@@ -15,6 +16,7 @@ TextFormField AppInputField({
     keyboardType: type,
     controller: controller,
     obscureText: obscure,
+    validator: validator,
     decoration: InputDecoration(
       prefixIcon: Icon(icon),
       suffixIcon: action,

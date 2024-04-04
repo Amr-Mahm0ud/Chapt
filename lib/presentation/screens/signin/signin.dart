@@ -3,7 +3,6 @@ import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/resources/routes_manager.dart';
 import 'package:chapt/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../../view_models/signin/signin_view_model.dart';
 import '../../widgets/button.dart';
@@ -91,31 +90,27 @@ class _SigninState extends State<Signin> {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 const SizedBox(height: AppValues.v40),
-                StreamBuilder<String>(
+                StreamBuilder<String?>(
                   stream: _viewModel.outEmail,
                   builder: (context, snapshot) => AppInputField(
                     hint: AppStrings.logininputText1,
-                    errorText: snapshot.data == '' ? null : snapshot.data,
+                    errorText: snapshot.data,
                     icon: Icons.email_outlined,
                     controller: _emailController,
+                    validator: (email) => _viewModel.validateEmail(email),
                   ),
                 ),
                 const SizedBox(height: AppValues.v15),
-                StreamBuilder(
+                StreamBuilder<String?>(
                   stream: _viewModel.outPass,
-                  builder: (context, snapshot) {
-                    return AppInputField(
-                      hint: AppStrings.logininputText2,
-                      errorText: snapshot.hasData
-                          ? snapshot.data!.isEmpty
-                              ? null
-                              : snapshot.data!
-                          : null,
-                      icon: Icons.lock_outline,
-                      obscure: true,
-                      controller: _passController,
-                    );
-                  },
+                  builder: (context, snapshot) => AppInputField(
+                    hint: AppStrings.logininputText2,
+                    errorText: snapshot.data,
+                    icon: Icons.lock_outline,
+                    obscure: true,
+                    controller: _passController,
+                    validator: (pass) => _viewModel.validatePass(pass),
+                  ),
                 ),
                 const SizedBox(height: AppValues.v20),
                 TextButton(
@@ -123,21 +118,24 @@ class _SigninState extends State<Signin> {
                   child: const Text(AppStrings.forgotPass),
                 ),
                 const SizedBox(height: AppValues.v50),
-                StreamBuilder(
-                  stream: CombineLatestStream.combine2(
-                      _viewModel.outEmail,
-                      _viewModel.outPass,
-                      (email, pass) => (email.isEmpty && pass.isEmpty)),
-                  builder: (context, snapshot) => AppButton(
-                    action: snapshot.hasData
-                        ? snapshot.data!
-                            ? () async{
-                                await _viewModel.login();
+                StreamBuilder<bool>(
+                  stream: _viewModel.outIsLoading,
+                  initialData: false,
+                  builder: (context, snapshot) {
+                    return AppButton(
+                      action: !snapshot.data!
+                          ? () async {
+                              bool valid = _formKey.currentState!.validate();
+                              if (valid) {
+                                await _viewModel.login(context);
                               }
-                            : null
-                        : null,
-                    content: const Text(AppStrings.signin),
-                  ),
+                            }
+                          : null,
+                      content: snapshot.data!
+                          ? const CircularProgressIndicator()
+                          : const Text(AppStrings.signin),
+                    );
+                  },
                 ),
               ],
             ),
