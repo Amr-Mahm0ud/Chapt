@@ -3,6 +3,7 @@ import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/resources/routes_manager.dart';
 import 'package:chapt/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../view_models/signin/signin_view_model.dart';
 import '../../widgets/button.dart';
@@ -27,6 +28,12 @@ class _SigninState extends State<Signin> {
     _emailController
         .addListener(() => _viewModel.setEmail(_emailController.text));
     _passController.addListener(() => _viewModel.setPass(_passController.text));
+    _viewModel.isUserLoggedInSuccefully.stream.listen((event) {
+      //because we use navigator and context inside stream listener
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacementNamed(Routes.home);
+      });
+    });
   }
 
   @override

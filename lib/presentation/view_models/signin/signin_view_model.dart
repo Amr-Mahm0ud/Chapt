@@ -23,6 +23,9 @@ class SigninViewModel extends BaseViewModel
   final StreamController<bool> _isLoadingStreamController =
       StreamController<bool>.broadcast();
 
+  final StreamController<bool> isUserLoggedInSuccefully =
+      StreamController<bool>.broadcast();
+
   LoginObject loginObject =
       LoginObject(AppConstants.emptyStr, AppConstants.emptyStr);
 
@@ -32,6 +35,7 @@ class SigninViewModel extends BaseViewModel
     _emailStreamController.close();
     _passStreamController.close();
     _isLoadingStreamController.close();
+    isUserLoggedInSuccefully.close();
   }
 
   @override
@@ -63,6 +67,7 @@ class SigninViewModel extends BaseViewModel
       return {};
     }, (data) {
       inIsLoading.add(false);
+      isUserLoggedInSuccefully.add(true);
     });
   }
 
