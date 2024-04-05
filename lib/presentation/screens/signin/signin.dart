@@ -1,3 +1,4 @@
+import 'package:chapt/app/app_prefs.dart';
 import 'package:chapt/app/dependency_injection.dart';
 import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/resources/routes_manager.dart';
@@ -21,6 +22,8 @@ class _SigninState extends State<Signin> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 
+  final AppPreferences _appPreferences = instance<AppPreferences>();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   _bind() {
@@ -31,6 +34,7 @@ class _SigninState extends State<Signin> {
     _viewModel.isUserLoggedInSuccefully.stream.listen((event) {
       //because we use navigator and context inside stream listener
       SchedulerBinding.instance.addPostFrameCallback((_) {
+        _appPreferences.setUserLoggedIn();
         Navigator.of(context).pushReplacementNamed(Routes.home);
       });
     });

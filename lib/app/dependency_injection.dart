@@ -9,10 +9,22 @@ import 'package:chapt/presentation/view_models/signin/signin_view_model.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'app_prefs.dart';
 
 final instance = GetIt.instance;
 
 Future<void> initAppModule() async {
+  // shared prefs instance
+  final sharedPrefs = await SharedPreferences.getInstance();
+
+  instance.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
+
+  // app prefs instance
+  instance
+      .registerLazySingleton<AppPreferences>(() => AppPreferences(instance()));
+
   // Network Information
   instance.registerLazySingleton<NetworkState>(
       () => NetworkStateImp(InternetConnectionChecker()));
@@ -30,8 +42,8 @@ Future<void> initAppModule() async {
       () => RemoteDataSourceImp(instance<AppServicesClient>()));
 
   //Repository
-  instance.registerLazySingleton<Repositry>(() => RepositoryImp(
-      instance<NetworkState>(), instance<RemoteDataSource>()));
+  instance.registerLazySingleton<Repositry>(() =>
+      RepositoryImp(instance<NetworkState>(), instance<RemoteDataSource>()));
 }
 
 Future<void> initLoginModule() async {
