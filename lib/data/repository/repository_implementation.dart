@@ -40,4 +40,30 @@ class RepositoryImp implements Repository {
       return Left(ErrorType.NO_INTERNET_CONNECTION.getFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, AuthenticationModel>> register(
+      SignupRequest signupRequest) async {
+    if (await _networkStateImp.isConnected) {
+      // user's deviece is connected
+      // so we complete the login request
+      try {
+        final response = await _remoteDataSourceImp.register(signupRequest);
+
+        // In mockApi we made the success response code equal 0
+        if (response.status == AppConstants.zero) {
+          // successful request
+          return Right(response.toDomain());
+        } else {
+          // error from api
+          return Left(ErrorType.DEFAULT.getFailure());
+        }
+      } catch (exception) {
+        return Left(ErrorHandler.handle(exception).failure);
+      }
+    } else {
+      // network error
+      return Left(ErrorType.NO_INTERNET_CONNECTION.getFailure());
+    }
+  }
 }

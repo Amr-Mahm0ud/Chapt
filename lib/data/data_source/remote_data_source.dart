@@ -4,6 +4,7 @@ import 'package:chapt/data/response/responses.dart';
 
 abstract class RemoteDataSource {
   Future<AuthenticationResponses> login(LoginRequest loginRequest);
+  Future<AuthenticationResponses> register(SignupRequest signupRequest);
 }
 
 class RemoteDataSourceImp implements RemoteDataSource {
@@ -14,5 +15,15 @@ class RemoteDataSourceImp implements RemoteDataSource {
   Future<AuthenticationResponses> login(LoginRequest loginRequest) async {
     return await _appServicesClient.login(
         loginRequest.email, loginRequest.password);
+  }
+
+  @override
+  Future<AuthenticationResponses> register(SignupRequest signupRequest) async {
+    return await _appServicesClient.register(
+      signupRequest.email,
+      signupRequest.password,
+      signupRequest.userName,
+      signupRequest.phoneNumber,
+    );
   }
 }
