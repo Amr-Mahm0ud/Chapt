@@ -15,4 +15,12 @@ abstract class AppServicesClient {
     @Field('email') String email,
     @Field('password') String password,
   );
+
+  @POST('/user/signup')
+  Future<AuthenticationResponses> register(
+    @Field('email') String email,
+    @Field('password') String password,
+    @Field('user_name') String userName,
+    @Field('phone_number') String phoneNumber,
+  );
 }
