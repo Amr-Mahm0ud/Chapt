@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../data/network/errors/failure.dart';
 
-abstract class Repositry {
+abstract class Repository {
   Future<Either<Failure, AuthenticationModel>> login(LoginRequest loginRequest);
   Future<Either<Failure, AuthenticationModel>> register(
       SignupRequest signupRequest);

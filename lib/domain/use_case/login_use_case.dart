@@ -8,7 +8,7 @@ import '../../data/network/api/requests.dart';
 
 class LoginUseCase
     implements BaseUseCase<LoginUseCaseInput, AuthenticationModel> {
-  final Repositry _repositry;
+  final Repository _repositry;
   LoginUseCase(this._repositry);
 
   @override

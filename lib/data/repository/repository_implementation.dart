@@ -9,7 +9,7 @@ import 'package:chapt/domain/models/models.dart';
 import 'package:chapt/domain/repository/repository.dart';
 import 'package:dartz/dartz.dart';
 
-class RepositoryImp implements Repositry {
+class RepositoryImp implements Repository {
   final NetworkState _networkStateImp;
   final RemoteDataSource _remoteDataSourceImp;
   RepositoryImp(this._networkStateImp, this._remoteDataSourceImp);

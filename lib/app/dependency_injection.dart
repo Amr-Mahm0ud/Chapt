@@ -42,14 +42,14 @@ Future<void> initAppModule() async {
       () => RemoteDataSourceImp(instance<AppServicesClient>()));
 
   //Repository
-  instance.registerLazySingleton<Repositry>(() =>
+  instance.registerLazySingleton<Repository>(() =>
       RepositoryImp(instance<NetworkState>(), instance<RemoteDataSource>()));
 }
 
 Future<void> initLoginModule() async {
   if (!GetIt.I.isRegistered<LoginUseCase>()) {
     instance.registerFactory<LoginUseCase>(
-        () => LoginUseCase(instance<Repositry>()));
+        () => LoginUseCase(instance<Repository>()));
     instance.registerFactory<SigninViewModel>(
         () => SigninViewModel(instance<LoginUseCase>()));
   }
