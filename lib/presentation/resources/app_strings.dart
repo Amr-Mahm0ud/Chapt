@@ -22,4 +22,7 @@ class AppStrings {
   static const logininputText2 = "Enter your password";
   static const emailReq = "Email is required";
   static const passReq = "Password is required";
+  //signup text strings
+  static const nameRep = "User Name is required";
+  static const phoneReq = "Phone Number is required";
 }
