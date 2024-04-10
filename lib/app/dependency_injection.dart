@@ -5,7 +5,9 @@ import 'package:chapt/data/network/network_state.dart';
 import 'package:chapt/data/repository/repository_implementation.dart';
 import 'package:chapt/domain/repository/repository.dart';
 import 'package:chapt/domain/use_case/login_use_case.dart';
+import 'package:chapt/domain/use_case/signup_use_case.dart';
 import 'package:chapt/presentation/view_models/signin/signin_view_model.dart';
+import 'package:chapt/presentation/view_models/signup/signup_view_model.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -52,5 +54,14 @@ Future<void> initLoginModule() async {
         () => LoginUseCase(instance<Repository>()));
     instance.registerFactory<SigninViewModel>(
         () => SigninViewModel(instance<LoginUseCase>()));
+  }
+}
+
+Future<void> initRegisterModule() async {
+  if (!GetIt.I.isRegistered<SignupUseCase>()) {
+    instance.registerFactory<SignupUseCase>(
+        () => SignupUseCase(instance<Repository>()));
+    instance.registerFactory<SignupViewModel>(
+        () => SignupViewModel(instance<SignupUseCase>()));
   }
 }

@@ -94,19 +94,19 @@ class SignupViewModel extends BaseViewModel
 
   @override
   void setName(name) {
-    inputEmail.add(name);
+    inputName.add(name);
     registerObject = registerObject.copyWith(userName: name);
   }
 
   @override
   void setPassword(pass) {
-    inputEmail.add(pass);
+    inputPass.add(pass);
     registerObject = registerObject.copyWith(pass: pass);
   }
 
   @override
   void setPhoneNum(phone) {
-    inputEmail.add(phone);
+    inputPhoneNum.add(phone);
     registerObject = registerObject.copyWith(phoneNum: phone);
   }
 
