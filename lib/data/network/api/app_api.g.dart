@@ -119,4 +119,24 @@ class _AppServicesClient implements AppServicesClient {
 
     return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
+
+  @override
+  Future<MessageResponse> sendMessage(MessageRequest messageRequest) async {
+    List<Content> listOfOldMsgs = [];
+    messageRequest.oldMsgs.map((msg) {
+      if (msg.role != AppConstants.modelRoleName) {
+        listOfOldMsgs.add(Content.text(msg.msg!));
+      } else {
+        listOfOldMsgs.add(Content.model([TextPart(msg.msg!)]));
+      }
+    });
+    final GenerativeModel model =
+        GenerativeModel(model: AppConstants.modelVersion, apiKey: apiKey);
+    final ChatSession chat = model.startChat(
+      history: listOfOldMsgs,
+    );
+    final Content content = Content.text(messageRequest.message);
+    final GenerateContentResponse response = await chat.sendMessage(content);
+    return MessageResponse.fromResponse(response);
+  }
 }

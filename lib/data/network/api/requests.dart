@@ -1,3 +1,5 @@
+import 'package:chapt/domain/models/models.dart';
+
 class LoginRequest {
   String email;
   String password;
@@ -10,4 +12,10 @@ class SignupRequest {
   String phoneNumber;
   String userName;
   SignupRequest(this.email, this.password, this.phoneNumber, this.userName);
+}
+
+class MessageRequest {
+  String message;
+  List<Message> oldMsgs;
+  MessageRequest(this.message, this.oldMsgs);
 }
