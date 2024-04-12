@@ -8,4 +8,5 @@ abstract class Repository {
   Future<Either<Failure, AuthenticationModel>> login(LoginRequest loginRequest);
   Future<Either<Failure, AuthenticationModel>> register(
       SignupRequest signupRequest);
+  Future<Either<Failure, Message>> sendMessage(MessageRequest messageRequest);
 }
