@@ -123,15 +123,19 @@ class _AppServicesClient implements AppServicesClient {
   @override
   Future<MessageResponse> sendMessage(MessageRequest messageRequest) async {
     List<Content> listOfOldMsgs = [];
-    messageRequest.oldMsgs.map((msg) {
+    for (Message msg in messageRequest.oldMsgs) {
       if (msg.role != AppConstants.modelRoleName) {
-        listOfOldMsgs.add(Content.text(msg.msg!));
+        listOfOldMsgs.add(Content.text(msg.msg));
       } else {
-        listOfOldMsgs.add(Content.model([TextPart(msg.msg!)]));
+        listOfOldMsgs.add(Content.model([TextPart(msg.msg)]));
       }
-    });
-    final GenerativeModel model =
-        GenerativeModel(model: AppConstants.modelVersion, apiKey: apiKey);
+    }
+    final GenerativeModel model = GenerativeModel(
+      model: AppConstants.modelVersion,
+      apiKey: apiKey,
+      generationConfig:
+          GenerationConfig(maxOutputTokens: AppConstants.geneConfig),
+    );
     final ChatSession chat = model.startChat(
       history: listOfOldMsgs,
     );

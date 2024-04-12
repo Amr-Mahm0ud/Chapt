@@ -5,7 +5,9 @@ import 'package:chapt/data/network/network_state.dart';
 import 'package:chapt/data/repository/repository_implementation.dart';
 import 'package:chapt/domain/repository/repository.dart';
 import 'package:chapt/domain/use_case/login_use_case.dart';
+import 'package:chapt/domain/use_case/send_message_use_case.dart';
 import 'package:chapt/domain/use_case/signup_use_case.dart';
+import 'package:chapt/presentation/view_models/home/main_view_model.dart';
 import 'package:chapt/presentation/view_models/signin/signin_view_model.dart';
 import 'package:chapt/presentation/view_models/signup/signup_view_model.dart';
 import 'package:dio/dio.dart';
@@ -63,5 +65,14 @@ Future<void> initRegisterModule() async {
         () => SignupUseCase(instance<Repository>()));
     instance.registerFactory<SignupViewModel>(
         () => SignupViewModel(instance<SignupUseCase>()));
+  }
+}
+
+Future<void> initHomeModule() async {
+  if (!GetIt.I.isRegistered<SendMessageUseCase>()) {
+    instance.registerFactory<SendMessageUseCase>(
+        () => SendMessageUseCase(instance<Repository>()));
+    instance.registerFactory<MainViewModel>(
+        () => MainViewModel(instance<SendMessageUseCase>()));
   }
 }

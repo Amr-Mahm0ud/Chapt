@@ -38,7 +38,7 @@ class AuthenticationModel {
 
 //Main Models
 class Message {
-  String? msg;
-  String? role;
+  String msg;
+  String role;
   Message(this.msg, this.role);
 }

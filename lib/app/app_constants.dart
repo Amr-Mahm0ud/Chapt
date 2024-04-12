@@ -6,4 +6,5 @@ class AppConstants {
   static const String appLang = 'en';
   static const int zero = 0;
   static const int timeOut = 60;
+  static const int geneConfig = 2048;
 }
