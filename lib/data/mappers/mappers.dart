@@ -1,3 +1,4 @@
+import 'package:chapt/app/app_constants.dart';
 import 'package:chapt/app/extentions.dart';
 import 'package:chapt/data/response/responses.dart';
 import 'package:chapt/domain/models/models.dart';
@@ -17,5 +18,11 @@ extension ContactResponsesMapper on ContactsResponses {
 extension AuthenticationResponsesMappers on AuthenticationResponses {
   AuthenticationModel toDomain() {
     return AuthenticationModel(user?.toDomain(), contacts?.toDomain());
+  }
+}
+
+extension MessageResponseMappers on MessageResponse {
+  Message toDomain() {
+    return Message(message.orEmpty(), role ?? AppConstants.modelRoleName);
   }
 }

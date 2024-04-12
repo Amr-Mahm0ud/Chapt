@@ -5,6 +5,7 @@ import 'package:chapt/data/response/responses.dart';
 abstract class RemoteDataSource {
   Future<AuthenticationResponses> login(LoginRequest loginRequest);
   Future<AuthenticationResponses> register(SignupRequest signupRequest);
+  Future<MessageResponse> sendMessage(MessageRequest messageRequest);
 }
 
 class RemoteDataSourceImp implements RemoteDataSource {
@@ -25,5 +26,10 @@ class RemoteDataSourceImp implements RemoteDataSource {
       signupRequest.userName,
       signupRequest.phoneNumber,
     );
+  }
+
+  @override
+  Future<MessageResponse> sendMessage(MessageRequest messageRequest) async {
+    return await _appServicesClient.sendMessage(messageRequest);
   }
 }
