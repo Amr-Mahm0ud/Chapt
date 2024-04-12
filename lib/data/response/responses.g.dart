@@ -65,3 +65,13 @@ Map<String, dynamic> _$AuthenticationResponsesToJson(
       'user': instance.user,
       'contacts': instance.contacts,
     };
+
+MessageResponse _$MessageResponseFromResponse(
+        GenerateContentResponse response) =>
+    MessageResponse(
+      response.text,
+      response.candidates.first.content.role,
+    );
+
+Content _$MessageResponseToContent(MessageResponse instance) =>
+    Content(instance.role, [TextPart(instance.message.toString())]);

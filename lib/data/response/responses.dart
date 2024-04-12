@@ -1,3 +1,4 @@
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'responses.g.dart';
 
@@ -52,4 +53,19 @@ class AuthenticationResponses extends BaseResponses {
       _$AuthenticationResponsesFromJson(json);
   //to json
   Map<String, dynamic> toJson() => _$AuthenticationResponsesToJson(this);
+}
+
+@JsonSerializable()
+class MessageResponse {
+  @JsonKey(name: 'text')
+  String? message;
+  @JsonKey(name: 'role')
+  String? role;
+
+  MessageResponse(this.message, this.role);
+  //from json
+  factory MessageResponse.fromResponse(GenerateContentResponse content) =>
+      _$MessageResponseFromResponse(content);
+  //to json
+  Content toContent() => _$MessageResponseToContent(this);
 }
