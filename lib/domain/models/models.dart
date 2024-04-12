@@ -35,3 +35,10 @@ class AuthenticationModel {
   ContactModel? contacts;
   AuthenticationModel(this.user, this.contacts);
 }
+
+//Main Models
+class Message {
+  String? msg;
+  String? role;
+  Message(this.msg, this.role);
+}
