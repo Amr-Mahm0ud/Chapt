@@ -1,21 +1,19 @@
-import 'dart:ui';
-
 import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/resources/values_manager.dart';
 import 'package:chapt/presentation/widgets/button.dart';
 import 'package:flutter/material.dart';
+
+import '../widgets/blur_effect.dart';
 
 class PopupError {
   static void showErrorDialog(BuildContext context, String errorMessage) {
     showDialog(
       context: context,
       builder: (context) {
-        return BackdropFilter(
-          filter:
-              ImageFilter.blur(sigmaX: AppValues.v10, sigmaY: AppValues.v10),
+        return AppBlurEffect(
           child: Dialog(
             backgroundColor:
-                Theme.of(context).primaryColor.withOpacity(AppValues.v025),
+                Theme.of(context).primaryColor.withOpacity(AppValues.v035),
             elevation: AppValues.v05,
             child: Padding(
               padding: const EdgeInsets.all(AppPadding.p20),

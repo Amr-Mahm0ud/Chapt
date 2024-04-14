@@ -19,6 +19,7 @@ class AppPadding {
 class AppValues {
   static const double v0 = 0.0;
   static const double v05 = 0.5;
+  static const double v035 = 0.35;
   static const double v025 = 0.25;
   static const double v10 = 10;
   static const double v12 = 12;
