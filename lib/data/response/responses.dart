@@ -55,17 +55,12 @@ class AuthenticationResponses extends BaseResponses {
   Map<String, dynamic> toJson() => _$AuthenticationResponsesToJson(this);
 }
 
-@JsonSerializable()
 class MessageResponse {
-  @JsonKey(name: 'text')
   String? message;
-  @JsonKey(name: 'role')
   String? role;
 
   MessageResponse(this.message, this.role);
-  //from json
-  factory MessageResponse.fromResponse(GenerateContentResponse content) =>
-      _$MessageResponseFromResponse(content);
-  //to json
-  Content toContent() => _$MessageResponseToContent(this);
+  //from response
+  factory MessageResponse.fromResponse(GenerateContentResponse response) =>
+      _$MessageResponseFromResponse(response);
 }
