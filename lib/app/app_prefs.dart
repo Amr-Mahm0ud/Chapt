@@ -30,6 +30,6 @@ class AppPreferences {
   }
 
   Future<void> logout() async {
-    _sharedPreferences.remove(prefsKeyIsUserLoggedIn);
+    await _sharedPreferences.remove(prefsKeyIsUserLoggedIn);
   }
 }

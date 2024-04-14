@@ -88,7 +88,7 @@ class RepositoryImp implements Repository {
           return Left(ErrorType.DEFAULT.getFailure());
         }
       } catch (exception) {
-        return Left(ErrorType.DEFAULT.getFailure());
+        return Left(Failure(AppConstants.zero, exception.toString()));
       }
     } else {
       // network error
