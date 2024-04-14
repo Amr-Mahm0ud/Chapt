@@ -43,6 +43,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
+      bottomSheet: _buildSendMessageSection(),
     );
   }
 
@@ -78,6 +79,41 @@ class _HomePageState extends State<HomePage> {
       flexibleSpace: ClipRRect(
         child: AppBlurEffect(
           child: const SizedBox(),
+        ),
+      ),
+    );
+  }
+
+  _buildSendMessageSection() {
+    return ClipRRect(
+      child: AppBlurEffect(
+        child: Container(
+          color: Theme.of(context).cardColor.withOpacity(AppValues.v025),
+          padding: const EdgeInsets.all(AppPadding.p10),
+          child: AppInputField(
+            hint: AppStrings.writeMsg,
+            controller: _messageController,
+            filled: false,
+            haveErrorText: false,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppValues.v50),
+              borderSide: BorderSide.none,
+            ),
+            action: StreamBuilder<bool>(
+              stream: _viewModel.outputMessage,
+              initialData: false,
+              builder: (context, snapshot) => IconButton(
+                icon: const Icon(Icons.send_rounded),
+                color: ColorManager.primary,
+                onPressed: snapshot.data!
+                    ? () async {
+                        await _viewModel.sendMessage(context);
+                        _messageController.clear();
+                      }
+                    : null,
+              ),
+            ),
+          ),
         ),
       ),
     );

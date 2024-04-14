@@ -47,5 +47,11 @@ ThemeData getAppTheme() {
       bodyLarge: getRegularText(color: ColorManager.backglight),
       bodyMedium: getLightText(color: ColorManager.greyColordark),
     ),
+
+    //bottom sheet theme
+    bottomSheetTheme: const BottomSheetThemeData(
+      elevation: AppValues.v0,
+      backgroundColor: ColorManager.trans,
+    ),
   );
 }
