@@ -5,7 +5,7 @@ class AppStrings {
   static const onboardingTitle1 = 'Welcome to Chapt';
   static const onboardingTitle2 = 'Ask Chapt about anything';
   static const onboardingSubTitle1 = 'Chat with AI to make your life easier';
-  static const onboardingSubTitle2 = 'Chapt can do anything with ChatGPT 3.5';
+  static const onboardingSubTitle2 = 'Chapt can do anything with Gemini AI';
   static const skip = 'Skip';
   static const next = 'Next';
   static const cont = 'Continue';
@@ -31,4 +31,10 @@ class AppStrings {
   static const signupInputText2 = "Enter your Phone Number";
   static const nameRep = "User Name is required";
   static const phoneReq = "Phone Number is required";
+  //home page Texts
+  static const welcome = 'welcome';
+  static const askQuestion = 'Hello, You can ask Gemini about anything';
+  static const canIHelp = 'How can I help you?';
+  //home page input text
+  static const writeMsg = 'write your message';
 }

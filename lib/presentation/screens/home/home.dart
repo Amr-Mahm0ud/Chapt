@@ -43,6 +43,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
+      body: _buildBodySection(),
       bottomSheet: _buildSendMessageSection(),
     );
   }
@@ -114,6 +115,29 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  _buildBodySection() {
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              AssetsManager.onboarding2,
+              width: AppValues.getWidth(context) * AppValues.v025,
+            ),
+            const SizedBox(height: AppValues.v20),
+            Text(
+              AppStrings.askQuestion,
+              style: Theme.of(context).textTheme.headlineLarge,
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );
