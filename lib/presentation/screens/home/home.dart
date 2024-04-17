@@ -1,10 +1,13 @@
 import 'package:chapt/app/dependency_injection.dart';
+import 'package:chapt/domain/models/models.dart';
 import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/resources/color_manager.dart';
 import 'package:chapt/presentation/resources/values_manager.dart';
 import 'package:chapt/presentation/view_models/home/main_view_model.dart';
 import 'package:chapt/presentation/widgets/text_field.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../resources/assets_manager.dart';
@@ -43,8 +46,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: _buildBodySection(),
-      bottomSheet: _buildSendMessageSection(),
+      body: _buildBodySection(context),
+      // bottomSheet: _buildSendMessageSection(),
     );
   }
 
@@ -64,7 +67,9 @@ class _HomePageState extends State<HomePage> {
         PopupMenuButton<String>(
           position: PopupMenuPosition.under,
           elevation: AppValues.v05,
-          onSelected: (val) {},
+          onSelected: (val) {
+            _viewModel.clearChat();
+          },
           itemBuilder: (BuildContext context) {
             return {'Logout', 'Clear Chat', 'Settings'}.map((String choice) {
               return PopupMenuItem<String>(
@@ -79,7 +84,9 @@ class _HomePageState extends State<HomePage> {
       ],
       flexibleSpace: ClipRRect(
         child: AppBlurEffect(
-          child: const SizedBox(),
+          child: Container(
+            color: Theme.of(context).cardColor.withOpacity(AppValues.v025),
+          ),
         ),
       ),
     );
@@ -108,8 +115,10 @@ class _HomePageState extends State<HomePage> {
                 color: ColorManager.primary,
                 onPressed: snapshot.data!
                     ? () async {
+                        Future.delayed(
+                                const Duration(milliseconds: AppValues.i100))
+                            .then((value) => _messageController.clear());
                         await _viewModel.sendMessage(context);
-                        _messageController.clear();
                       }
                     : null,
               ),
@@ -120,26 +129,56 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _buildBodySection() {
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              AssetsManager.onboarding2,
-              width: AppValues.getWidth(context) * AppValues.v025,
-            ),
-            const SizedBox(height: AppValues.v20),
-            Text(
-              AppStrings.askQuestion,
-              style: Theme.of(context).textTheme.headlineLarge,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
+  _buildBodySection(context) {
+    return StreamBuilder<List<Message>>(
+        stream: _viewModel.outputAllMessages,
+        builder: (context, snapshot) {
+          if (snapshot.data == null || snapshot.data!.isEmpty) {
+            return Center(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          AssetsManager.onboarding2,
+                          width: AppValues.getWidth(context) * AppValues.v025,
+                        ),
+                        const SizedBox(height: AppValues.v20),
+                        Text(
+                          AppStrings.askQuestion,
+                          style: Theme.of(context).textTheme.headlineMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                  _buildSendMessageSection(),
+                ],
+              ),
+            );
+          } else {
+            return Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ...snapshot.data!.map(
+                          (message) => Card(
+                            child: Text(message.msg),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                _buildSendMessageSection(),
+              ],
+            );
+          }
+        });
   }
 }

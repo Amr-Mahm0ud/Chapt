@@ -49,7 +49,7 @@ class _MyWidgetState extends State<AppInputField> {
         hintText: widget.hint,
         errorText: widget.haveErrorText ? widget.errorText : null,
         contentPadding: const EdgeInsets.symmetric(
-            vertical: AppValues.v12, horizontal: AppPadding.p20),
+            vertical: AppPadding.p10, horizontal: AppPadding.p10),
         enabledBorder: widget.border,
         disabledBorder: widget.border,
         border: widget.border ??
