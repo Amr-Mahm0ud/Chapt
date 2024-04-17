@@ -316,3 +316,145 @@ abstract class _RegisterObject implements RegisterObject {
   _$$RegisterObjectImplCopyWith<_$RegisterObjectImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$SendMessageObject {
+  String get msg => throw _privateConstructorUsedError;
+  List<Message> get oldMsgs => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $SendMessageObjectCopyWith<SendMessageObject> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SendMessageObjectCopyWith<$Res> {
+  factory $SendMessageObjectCopyWith(
+          SendMessageObject value, $Res Function(SendMessageObject) then) =
+      _$SendMessageObjectCopyWithImpl<$Res, SendMessageObject>;
+  @useResult
+  $Res call({String msg, List<Message> oldMsgs});
+}
+
+/// @nodoc
+class _$SendMessageObjectCopyWithImpl<$Res, $Val extends SendMessageObject>
+    implements $SendMessageObjectCopyWith<$Res> {
+  _$SendMessageObjectCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? msg = null,
+    Object? oldMsgs = null,
+  }) {
+    return _then(_value.copyWith(
+      msg: null == msg
+          ? _value.msg
+          : msg // ignore: cast_nullable_to_non_nullable
+              as String,
+      oldMsgs: null == oldMsgs
+          ? _value.oldMsgs
+          : oldMsgs // ignore: cast_nullable_to_non_nullable
+              as List<Message>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SendMessageObjectImplCopyWith<$Res>
+    implements $SendMessageObjectCopyWith<$Res> {
+  factory _$$SendMessageObjectImplCopyWith(_$SendMessageObjectImpl value,
+          $Res Function(_$SendMessageObjectImpl) then) =
+      __$$SendMessageObjectImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String msg, List<Message> oldMsgs});
+}
+
+/// @nodoc
+class __$$SendMessageObjectImplCopyWithImpl<$Res>
+    extends _$SendMessageObjectCopyWithImpl<$Res, _$SendMessageObjectImpl>
+    implements _$$SendMessageObjectImplCopyWith<$Res> {
+  __$$SendMessageObjectImplCopyWithImpl(_$SendMessageObjectImpl _value,
+      $Res Function(_$SendMessageObjectImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? msg = null,
+    Object? oldMsgs = null,
+  }) {
+    return _then(_$SendMessageObjectImpl(
+      null == msg
+          ? _value.msg
+          : msg // ignore: cast_nullable_to_non_nullable
+              as String,
+      null == oldMsgs
+          ? _value._oldMsgs
+          : oldMsgs // ignore: cast_nullable_to_non_nullable
+              as List<Message>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SendMessageObjectImpl implements _SendMessageObject {
+  _$SendMessageObjectImpl(this.msg, final List<Message> oldMsgs)
+      : _oldMsgs = oldMsgs;
+
+  @override
+  final String msg;
+  final List<Message> _oldMsgs;
+  @override
+  List<Message> get oldMsgs {
+    if (_oldMsgs is EqualUnmodifiableListView) return _oldMsgs;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_oldMsgs);
+  }
+
+  @override
+  String toString() {
+    return 'SendMessageObject(msg: $msg, oldMsgs: $oldMsgs)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SendMessageObjectImpl &&
+            (identical(other.msg, msg) || other.msg == msg) &&
+            const DeepCollectionEquality().equals(other._oldMsgs, _oldMsgs));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, msg, const DeepCollectionEquality().hash(_oldMsgs));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SendMessageObjectImplCopyWith<_$SendMessageObjectImpl> get copyWith =>
+      __$$SendMessageObjectImplCopyWithImpl<_$SendMessageObjectImpl>(
+          this, _$identity);
+}
+
+abstract class _SendMessageObject implements SendMessageObject {
+  factory _SendMessageObject(final String msg, final List<Message> oldMsgs) =
+      _$SendMessageObjectImpl;
+
+  @override
+  String get msg;
+  @override
+  List<Message> get oldMsgs;
+  @override
+  @JsonKey(ignore: true)
+  _$$SendMessageObjectImplCopyWith<_$SendMessageObjectImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

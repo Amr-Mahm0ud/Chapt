@@ -29,6 +29,7 @@ class RouteGenerator {
         initRegisterModule();
         return MaterialPageRoute(builder: (_) => const Signup());
       case Routes.home:
+        initHomeModule();
         return MaterialPageRoute(builder: (_) => const HomePage());
       default:
         return undifinedRoute();
