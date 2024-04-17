@@ -37,6 +37,11 @@ class MainViewModel extends BaseViewModel
     inputIsLoading.add(false);
   }
 
+  clearChat() {
+    _oldMessages.clear();
+    inputAllMessages.add(<Message>[]);
+  }
+
   //************************************************************* */
   //view model inputs functions
   @override

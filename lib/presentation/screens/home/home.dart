@@ -4,14 +4,13 @@ import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/resources/color_manager.dart';
 import 'package:chapt/presentation/resources/values_manager.dart';
 import 'package:chapt/presentation/view_models/home/main_view_model.dart';
-import 'package:chapt/presentation/widgets/text_field.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:chapt/presentation/widgets/common/text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../resources/assets_manager.dart';
-import '../../widgets/blur_effect.dart';
+import '../../widgets/common/blur_effect.dart';
+import '../../widgets/home/chat_bubble.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -47,7 +46,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBodySection(context),
-      // bottomSheet: _buildSendMessageSection(),
     );
   }
 
@@ -164,13 +162,11 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Expanded(
                   child: SingleChildScrollView(
+                    padding: const EdgeInsets.only(top: AppPadding.p5),
                     child: Column(
                       children: [
-                        ...snapshot.data!.map(
-                          (message) => Card(
-                            child: Text(message.msg),
-                          ),
-                        )
+                        ...snapshot.data!
+                            .map((message) => AppChatBubble(message: message))
                       ],
                     ),
                   ),

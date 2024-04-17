@@ -24,6 +24,7 @@ ThemeData getAppTheme() {
     appBarTheme: const AppBarTheme(
       elevation: AppValues.v0,
       backgroundColor: ColorManager.trans,
+      shadowColor: ColorManager.trans,
     ),
     //elevated button theme
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -46,12 +47,6 @@ ThemeData getAppTheme() {
       headlineMedium: getSemiBoldText(color: ColorManager.greyColordark),
       bodyLarge: getRegularText(color: ColorManager.backglight),
       bodyMedium: getLightText(color: ColorManager.greyColordark),
-    ),
-
-    //bottom sheet theme
-    bottomSheetTheme: const BottomSheetThemeData(
-      elevation: AppValues.v0,
-      backgroundColor: ColorManager.trans,
     ),
   );
 }
