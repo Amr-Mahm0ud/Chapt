@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../../view_models/signin/signin_view_model.dart';
-import '../../widgets/button.dart';
-import '../../widgets/text_field.dart';
+import '../../widgets/common/button.dart';
+import '../../widgets/common/text_field.dart';
 
 class Signin extends StatefulWidget {
   const Signin({super.key});

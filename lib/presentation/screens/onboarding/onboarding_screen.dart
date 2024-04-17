@@ -3,7 +3,7 @@ import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/resources/routes_manager.dart';
 import 'package:chapt/presentation/resources/values_manager.dart';
 import 'package:chapt/presentation/view_models/onboarding/onboarding_view_model.dart';
-import 'package:chapt/presentation/widgets/button.dart';
+import 'package:chapt/presentation/widgets/common/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

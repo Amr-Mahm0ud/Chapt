@@ -4,7 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import '../resources/values_manager.dart';
+import '../../resources/values_manager.dart';
 
 Widget AppBlurEffect({required child}) {
   return BackdropFilter(
