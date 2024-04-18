@@ -1,11 +1,15 @@
 import 'package:chapt/app/app_constants.dart';
+import 'package:chapt/app/dependency_injection.dart';
 import 'package:chapt/domain/models/models.dart';
 import 'package:chapt/presentation/resources/values_manager.dart';
+import 'package:chapt/presentation/view_models/home/main_view_model.dart';
 import 'package:flutter/material.dart';
 
 class AppChatBubble extends StatelessWidget {
   final Message message;
-  const AppChatBubble({super.key, required this.message});
+  AppChatBubble({super.key, required this.message});
+
+  final MainViewModel _viewModel = instance<MainViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +45,9 @@ class AppChatBubble extends StatelessWidget {
                   topLeft: Radius.circular(AppValues.v10),
                 ),
         ),
-        child: Text(message.msg),
+        child: RichText(
+          text: _viewModel.formatText(message.msg, context),
+        ),
       ),
     );
   }

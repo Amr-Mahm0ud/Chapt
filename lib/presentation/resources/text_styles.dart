@@ -14,14 +14,14 @@ TextStyle _getTextStyle(double size, Color color, FontWeight wieght) {
 
 // regular text style
 TextStyle getRegularText(
-    {double size = FontSizeManager.s21,
+    {double size = FontSizeManager.s18,
     Color color = ColorManager.backglight}) {
   return _getTextStyle(size, color, FontWieghtManager.regular);
 }
 
 // light text style
 TextStyle getLightText(
-    {double size = FontSizeManager.s18,
+    {double size = FontSizeManager.s16,
     Color color = ColorManager.backglight}) {
   return _getTextStyle(size, color, FontWieghtManager.light);
 }

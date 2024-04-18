@@ -5,6 +5,7 @@ import 'package:chapt/domain/models/models.dart';
 import 'package:chapt/domain/use_case/send_message_use_case.dart';
 import 'package:chapt/presentation/common/freezed_data_classes.dart';
 import 'package:chapt/presentation/view_models/base/base_view_model.dart';
+import 'package:flutter/material.dart';
 
 import '../../common/popup_error.dart';
 
@@ -40,6 +41,37 @@ class MainViewModel extends BaseViewModel
   clearChat() {
     _oldMessages.clear();
     inputAllMessages.add(<Message>[]);
+  }
+
+  //format response Message
+  TextSpan formatText(String text, context) {
+    RegExp regex = RegExp(r'\*\*(.*?)\*\*');
+    //to add every splited text
+    List<TextSpan> spans = [];
+
+    //decide if it a title or regular text
+    text.splitMapJoin(
+      regex,
+      onMatch: (Match match) {
+        spans.add(
+          TextSpan(
+            text: match.group(1),
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+          ),
+        );
+        return '';
+      },
+      onNonMatch: (String text) {
+        spans.add(
+          TextSpan(
+            text: text,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        );
+        return '';
+      },
+    );
+    return TextSpan(children: spans);
   }
 
   //************************************************************* */
