@@ -13,12 +13,13 @@ class MainViewModel extends BaseViewModel
     implements MainViewModelInputs, MainViewModelOutputs {
   final StreamController<String> _messageStreamController =
       StreamController<String>.broadcast();
-  final StreamController<bool> _isLoadingStreamController =
-      StreamController.broadcast();
+
   final StreamController<List<Message>> _allMessagesStreamController =
       StreamController.broadcast();
 
   final List<Message> _oldMessages = <Message>[];
+
+  bool isLoading = false;
 
   SendMessageObject _sendMessageObject =
       SendMessageObject(AppConstants.emptyStr, []);
@@ -30,12 +31,10 @@ class MainViewModel extends BaseViewModel
   @override
   void dispose() {
     _messageStreamController.close();
-    _isLoadingStreamController.close();
   }
 
   @override
   void start() {
-    inputIsLoading.add(false);
   }
 
   clearChat() {
@@ -43,7 +42,7 @@ class MainViewModel extends BaseViewModel
     inputAllMessages.add(<Message>[]);
   }
 
-  //format response Message
+  // format response Message
   TextSpan formatText(String text, context) {
     RegExp regex = RegExp(r'\*\*(.*?)\*\*');
     //to add every splited text
@@ -56,7 +55,10 @@ class MainViewModel extends BaseViewModel
         spans.add(
           TextSpan(
             text: match.group(1),
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(fontWeight: FontWeight.bold),
           ),
         );
         return '';
@@ -76,8 +78,6 @@ class MainViewModel extends BaseViewModel
 
   //************************************************************* */
   //view model inputs functions
-  @override
-  Sink get inputIsLoading => _isLoadingStreamController.sink;
 
   @override
   Sink<String> get inputMessage => _messageStreamController.sink;
@@ -88,7 +88,7 @@ class MainViewModel extends BaseViewModel
   @override
   sendMessage(context) async {
     try {
-      inputIsLoading.add(true);
+      isLoading = true;
       _sendMessageObject = _sendMessageObject
           .copyWith(oldMsgs: [..._oldMessages.map((msg) => msg)]);
       _oldMessages.add(Message(_sendMessageObject.msg, 'user'));
@@ -99,12 +99,12 @@ class MainViewModel extends BaseViewModel
             _sendMessageObject.msg, _sendMessageObject.oldMsgs),
       ))
           .fold((failure) async {
-        inputIsLoading.add(false);
+        isLoading = false;
         _oldMessages.removeLast();
         PopupError.showErrorDialog(context, failure.message);
         return {};
       }, (data) async {
-        inputIsLoading.add(false);
+        isLoading = false;
         _oldMessages.add(data);
         inputAllMessages.add([..._oldMessages.map((msg) => msg)]);
         _sendMessageObject = _sendMessageObject
@@ -123,9 +123,6 @@ class MainViewModel extends BaseViewModel
 
   //*************************************************************** */
   //output view model functions
-  @override
-  Stream<bool> get outputIsLoading => _isLoadingStreamController.stream;
-
   @override
   Stream<bool> get outputMessage =>
       _messageStreamController.stream.map((msg) => _validateMsg(msg));
@@ -148,12 +145,10 @@ abstract class MainViewModelInputs extends BaseViewModelInputs {
   setMessage(value);
   sendMessage(context);
   Sink<String> get inputMessage;
-  Sink get inputIsLoading;
   Sink get inputAllMessages;
 }
 
 abstract class MainViewModelOutputs extends BaseViewModelOutputs {
   Stream<bool> get outputMessage;
-  Stream get outputIsLoading;
   Stream<List<Message>> get outputAllMessages;
 }
