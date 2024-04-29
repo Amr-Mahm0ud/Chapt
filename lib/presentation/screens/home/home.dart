@@ -1,3 +1,4 @@
+import 'package:chapt/app/app_prefs.dart';
 import 'package:chapt/app/dependency_injection.dart';
 import 'package:chapt/domain/models/models.dart';
 import 'package:chapt/presentation/resources/app_strings.dart';
@@ -7,6 +8,7 @@ import 'package:chapt/presentation/view_models/home/main_view_model.dart';
 import 'package:chapt/presentation/widgets/common/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../resources/assets_manager.dart';
 import '../../widgets/common/blur_effect.dart';
@@ -21,7 +23,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final MainViewModel _viewModel = instance<MainViewModel>();
+  final AppPreferences _appPreferences = instance<AppPreferences>();
   final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   _bind() {
     _viewModel.start();
@@ -66,7 +70,11 @@ class _HomePageState extends State<HomePage> {
           position: PopupMenuPosition.under,
           elevation: AppValues.v05,
           onSelected: (val) {
-            _viewModel.clearChat();
+            if (val == 'Logout') {
+              _appPreferences.logout();
+            } else if (val == 'Clear Chat') {
+              _viewModel.clearChat();
+            } else {}
           },
           itemBuilder: (BuildContext context) {
             return {'Logout', 'Clear Chat', 'Settings'}.map((String choice) {
@@ -96,31 +104,42 @@ class _HomePageState extends State<HomePage> {
         child: Container(
           color: Theme.of(context).cardColor.withOpacity(AppValues.v025),
           padding: const EdgeInsets.all(AppPadding.p10),
-          child: AppInputField(
-            hint: AppStrings.writeMsg,
-            controller: _messageController,
-            filled: false,
-            haveErrorText: false,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppValues.v50),
-              borderSide: BorderSide.none,
-            ),
-            action: StreamBuilder<bool>(
-              stream: _viewModel.outputMessage,
-              initialData: false,
-              builder: (context, snapshot) => IconButton(
-                icon: const Icon(Icons.send_rounded),
-                color: ColorManager.primary,
-                onPressed: snapshot.data!
-                    ? () async {
-                        Future.delayed(
-                                const Duration(milliseconds: AppValues.i100))
-                            .then((value) => _messageController.clear());
-                        await _viewModel.sendMessage(context);
-                      }
-                    : null,
+          child: Column(
+            children: [
+              AppInputField(
+                hint: AppStrings.writeMsg,
+                controller: _messageController,
+                filled: false,
+                haveErrorText: false,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppValues.v50),
+                  borderSide: BorderSide.none,
+                ),
+                action: StreamBuilder<bool>(
+                  stream: _viewModel.outputMessage,
+                  initialData: false,
+                  builder: (context, snapshot) {
+                    return IconButton(
+                      icon: const Icon(Icons.send_rounded),
+                      color: ColorManager.primary,
+                      onPressed: snapshot.data!
+                          ? () async {
+                              Future.delayed(const Duration(
+                                      milliseconds: AppValues.i100))
+                                  .then((value) => _messageController.clear());
+                              await _viewModel.sendMessage(context);
+                              _scrollController.animateTo(
+                                  _scrollController.position.maxScrollExtent,
+                                  duration: const Duration(
+                                      milliseconds: AppValues.i300),
+                                  curve: Curves.linear);
+                            }
+                          : null,
+                    );
+                  },
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -162,11 +181,18 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: _scrollController,
                     padding: const EdgeInsets.only(top: AppPadding.p5),
                     child: Column(
                       children: [
                         ...snapshot.data!
-                            .map((message) => AppChatBubble(message: message))
+                            .map((message) => AppChatBubble(message: message)),
+                        _viewModel.isLoading
+                            ? LottieBuilder.asset(
+                                AssetsManager.loading,
+                                width: AppValues.getWidth(context) * 0.25,
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
