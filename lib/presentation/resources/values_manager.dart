@@ -30,6 +30,7 @@ class AppValues {
   static const double v40 = 40;
   static const double v50 = 50;
 
+  static const int i1 = 1;
   static const int i2 = 2;
   static const int i100 = 100;
   static const int i300 = 300;
@@ -38,5 +39,9 @@ class AppValues {
 
   static double getWidth(context) {
     return MediaQuery.of(context).size.width;
+  }
+
+  static double getHeight(context) {
+    return MediaQuery.of(context).size.height;
   }
 }

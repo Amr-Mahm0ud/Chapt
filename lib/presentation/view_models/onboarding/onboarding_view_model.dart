@@ -10,7 +10,7 @@ class OnboardingViewModel extends BaseViewModel
   final StreamController _streamController =
       StreamController<OnboardingViewObject>();
   late List<OnboardingObject> _list;
-  int _currentIndex = 0;
+  int currentIndex = 0;
   @override
   void dispose() {
     _streamController.close();
@@ -25,14 +25,14 @@ class OnboardingViewModel extends BaseViewModel
   //to animate to next onboarding page
   @override
   int goNext() {
-    _currentIndex++;
-    return _currentIndex;
+    currentIndex++;
+    return currentIndex;
   }
 
   //to save current index
   @override
   void onPageChanged(int index) {
-    _currentIndex = index;
+    currentIndex = index;
     _postDataToView();
   }
 
@@ -47,9 +47,9 @@ class OnboardingViewModel extends BaseViewModel
   //posting data to view
   _postDataToView() {
     inputOnboardingViewModel.add(OnboardingViewObject(
-      _list[_currentIndex],
+      _list[currentIndex],
       _list.length,
-      _currentIndex,
+      currentIndex,
     ));
   }
 

@@ -28,13 +28,13 @@ class _SplashScreenState extends State<SplashScreen> {
       if (isLoggedin) {
         Navigator.pushReplacementNamed(context, Routes.home);
       } else {
-        _appPreferences.isOnBoardingScreenViewed().then((isOnboardingViewed) {
-          if (isOnboardingViewed) {
-            Navigator.pushReplacementNamed(context, Routes.signup);
-          } else {
+        // _appPreferences.isOnBoardingScreenViewed().then((isOnboardingViewed) {
+          // if (isOnboardingViewed) {
+          //   Navigator.pushReplacementNamed(context, Routes.signup);
+          // } else {
             Navigator.pushReplacementNamed(context, Routes.onboarding);
-          }
-        });
+          // }
+        // });
       }
     });
   }
