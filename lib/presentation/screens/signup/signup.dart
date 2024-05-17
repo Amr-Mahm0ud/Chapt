@@ -171,7 +171,7 @@ class _SignupState extends State<Signup> {
                           : null,
                       content: snapshot.data!
                           ? const CircularProgressIndicator()
-                          : const Text(AppStrings.signin),
+                          : const Text(AppStrings.signup),
                     );
                   },
                 ),

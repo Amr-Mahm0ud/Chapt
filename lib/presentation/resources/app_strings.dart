@@ -18,8 +18,8 @@ class AppStrings {
   static const haveNoAcc = "Don't have an account?";
   static const signup = "Sign up";
   //input text strings
-  static const logininputText1 = "Enter your email";
-  static const logininputText2 = "Enter your password";
+  static const logininputText1 = "Enter your Email";
+  static const logininputText2 = "Enter your Password";
   static const emailReq = "Email is required";
   static const passReq = "Password is required";
   //login texts
