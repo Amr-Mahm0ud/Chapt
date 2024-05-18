@@ -53,7 +53,7 @@ dependencies:
   shared_preferences: ^2.2.2
   google_generative_ai: ^0.2.3
   lottie: ^3.1.0
-
+  flutter_tts: ^4.0.2
 
 dev_dependencies:
   flutter_test:

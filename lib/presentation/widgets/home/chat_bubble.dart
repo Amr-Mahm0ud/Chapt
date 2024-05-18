@@ -2,6 +2,7 @@ import 'package:chapt/app/app_constants.dart';
 import 'package:chapt/app/dependency_injection.dart';
 import 'package:chapt/domain/models/models.dart';
 import 'package:chapt/presentation/resources/values_manager.dart';
+import 'package:chapt/presentation/services/text_to_speech.dart';
 import 'package:chapt/presentation/view_models/home/main_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,9 @@ class AppChatBubble extends StatelessWidget {
   final Message message;
   AppChatBubble({super.key, required this.message});
 
-  final MainViewModel _viewModel = instance<MainViewModel>();
+  final MainViewModel _mainViewModel = instance<MainViewModel>();
+  final TextToSpeechImplementer _textToSpeechImplementer =
+      instance<TextToSpeechImplementer>();
 
   @override
   Widget build(BuildContext context) {
@@ -17,38 +20,111 @@ class AppChatBubble extends StatelessWidget {
       alignment: message.role == AppConstants.modelRoleName
           ? Alignment.centerLeft
           : Alignment.centerRight,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-            horizontal: AppPadding.p10, vertical: AppPadding.p5),
-        margin: EdgeInsets.only(
-          bottom: AppPadding.p5,
-          right: message.role == AppConstants.modelRoleName
-              ? AppMargins.m40
-              : AppPadding.p10,
-          left: message.role == AppConstants.modelRoleName
-              ? AppPadding.p10
-              : AppMargins.m40,
-        ),
-        decoration: BoxDecoration(
-          color: message.role == AppConstants.modelRoleName
-              ? Theme.of(context).cardColor
-              : Theme.of(context).colorScheme.primary,
-          borderRadius: message.role == AppConstants.modelRoleName
-              ? const BorderRadius.only(
-                  bottomRight: Radius.circular(AppValues.v10),
-                  topRight: Radius.circular(AppValues.v10),
-                  topLeft: Radius.circular(AppValues.v10),
-                )
-              : const BorderRadius.only(
-                  bottomLeft: Radius.circular(AppValues.v10),
-                  topRight: Radius.circular(AppValues.v10),
-                  topLeft: Radius.circular(AppValues.v10),
+      child: StreamBuilder<bool>(
+          initialData: false,
+          stream: _mainViewModel.outputShowTts,
+          builder: (context, snapshot) {
+            return GestureDetector(
+              onTap: () {
+                _mainViewModel.setShowTts();
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppPadding.p15, vertical: AppPadding.p10),
+                margin: EdgeInsets.only(
+                  bottom: AppPadding.p10,
+                  right: message.role == AppConstants.modelRoleName
+                      ? AppMargins.m40
+                      : AppPadding.p10,
+                  left: message.role == AppConstants.modelRoleName
+                      ? AppPadding.p10
+                      : AppMargins.m40,
                 ),
-        ),
-        child: RichText(
-          text: _viewModel.formatText(message.msg, context),
-        ),
-      ),
+                decoration: BoxDecoration(
+                  color: message.role == AppConstants.modelRoleName
+                      ? Theme.of(context).cardColor
+                      : Theme.of(context).colorScheme.primary,
+                  borderRadius: message.role == AppConstants.modelRoleName
+                      ? const BorderRadius.only(
+                          bottomRight: Radius.circular(AppValues.v15),
+                          topRight: Radius.circular(AppValues.v15),
+                          topLeft: Radius.circular(AppValues.v15),
+                        )
+                      : const BorderRadius.only(
+                          bottomLeft: Radius.circular(AppValues.v15),
+                          topRight: Radius.circular(AppValues.v15),
+                          topLeft: Radius.circular(AppValues.v15),
+                        ),
+                ),
+                child: message.role == AppConstants.modelRoleName
+                    ? Column(
+                        children: [
+                          RichText(
+                            text:
+                                _mainViewModel.formatText(message.msg, context),
+                          ),
+                          if (snapshot.data!) ...[
+                            const SizedBox(height: AppPadding.p10),
+                            StreamBuilder<TtsState>(
+                                initialData: _textToSpeechImplementer.ttsState,
+                                stream: _textToSpeechImplementer.outputState,
+                                builder: (context, snapshot) {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      InkWell(
+                                        onTap: _textToSpeechImplementer
+                                                .isPlaying
+                                            ? () async {
+                                                await _textToSpeechImplementer
+                                                    .pause();
+                                              }
+                                            : () async {
+                                                await _textToSpeechImplementer
+                                                    .speak(
+                                                        message.msg, context);
+                                              },
+                                        child: AnimatedIcon(
+                                          progress: kAlwaysCompleteAnimation,
+                                          icon:
+                                              _textToSpeechImplementer.isPlaying
+                                                  ? AnimatedIcons.play_pause
+                                                  : AnimatedIcons.pause_play,
+                                        ),
+                                      ),
+                                      if (_textToSpeechImplementer.isPlaying ||
+                                          _textToSpeechImplementer
+                                              .isPaused) ...[
+                                        // const SizedBox(width: AppPadding.p10),
+                                        // InkWell(
+                                        //   onTap: () {
+                                        //     _textToSpeechImplementer
+                                        //         .changeRate();
+                                        //   },
+                                        //   child: Icon(
+                                        //       _textToSpeechImplementer.rate ==
+                                        //               AppValues.v05
+                                        //           ? Icons.looks_two_outlined
+                                        //           : Icons.looks_two_rounded),
+                                        // ),
+                                        const SizedBox(width: AppPadding.p10),
+                                        InkWell(
+                                          onTap: () {
+                                            _textToSpeechImplementer.stop();
+                                          },
+                                          child: const Icon(Icons.close),
+                                        )
+                                      ]
+                                    ],
+                                  );
+                                })
+                          ]
+                        ],
+                      )
+                    : Text(message.msg),
+              ),
+            );
+          }),
     );
   }
 }

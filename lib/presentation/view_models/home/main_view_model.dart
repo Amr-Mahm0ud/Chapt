@@ -14,12 +14,16 @@ class MainViewModel extends BaseViewModel
   final StreamController<String> _messageStreamController =
       StreamController<String>.broadcast();
 
+  final StreamController<bool> _showTtsController =
+      StreamController<bool>.broadcast();
+
   final StreamController<List<Message>> _allMessagesStreamController =
       StreamController.broadcast();
 
   final List<Message> _oldMessages = <Message>[];
 
   bool isLoading = false;
+  bool _showTts = false;
 
   SendMessageObject _sendMessageObject =
       SendMessageObject(AppConstants.emptyStr, []);
@@ -31,11 +35,12 @@ class MainViewModel extends BaseViewModel
   @override
   void dispose() {
     _messageStreamController.close();
+    _allMessagesStreamController.close();
+    _showTtsController.close();
   }
 
   @override
-  void start() {
-  }
+  void start() {}
 
   clearChat() {
     _oldMessages.clear();
@@ -86,6 +91,9 @@ class MainViewModel extends BaseViewModel
   Sink get inputAllMessages => _allMessagesStreamController.sink;
 
   @override
+  Sink get inputShowTts => _showTtsController.sink;
+
+  @override
   sendMessage(context) async {
     try {
       isLoading = true;
@@ -121,6 +129,12 @@ class MainViewModel extends BaseViewModel
     _sendMessageObject = _sendMessageObject.copyWith(msg: msg);
   }
 
+  @override
+  setShowTts() {
+    _showTts = !_showTts;
+    inputShowTts.add(_showTts);
+  }
+
   //*************************************************************** */
   //output view model functions
   @override
@@ -130,6 +144,9 @@ class MainViewModel extends BaseViewModel
   @override
   Stream<List<Message>> get outputAllMessages =>
       _allMessagesStreamController.stream;
+
+  @override
+  Stream<bool> get outputShowTts => _showTtsController.stream;
 
   //validation functions
   bool _validateMsg(msg) {
@@ -144,11 +161,14 @@ class MainViewModel extends BaseViewModel
 abstract class MainViewModelInputs extends BaseViewModelInputs {
   setMessage(value);
   sendMessage(context);
+  setShowTts();
   Sink<String> get inputMessage;
   Sink get inputAllMessages;
+  Sink get inputShowTts;
 }
 
 abstract class MainViewModelOutputs extends BaseViewModelOutputs {
   Stream<bool> get outputMessage;
+  Stream<bool> get outputShowTts;
   Stream<List<Message>> get outputAllMessages;
 }
