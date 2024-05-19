@@ -6,18 +6,30 @@ import 'package:chapt/presentation/services/text_to_speech.dart';
 import 'package:chapt/presentation/view_models/home/main_view_model.dart';
 import 'package:flutter/material.dart';
 
-class AppChatBubble extends StatelessWidget {
+class AppChatBubble extends StatefulWidget {
   final Message message;
-  AppChatBubble({super.key, required this.message});
+  const AppChatBubble({super.key, required this.message});
 
+  @override
+  State<AppChatBubble> createState() => _AppChatBubbleState();
+}
+
+class _AppChatBubbleState extends State<AppChatBubble> {
   final MainViewModel _mainViewModel = instance<MainViewModel>();
   final TextToSpeechImplementer _textToSpeechImplementer =
       instance<TextToSpeechImplementer>();
 
   @override
+  void dispose() {
+    _mainViewModel.dispose();
+    _textToSpeechImplementer.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: message.role == AppConstants.modelRoleName
+      alignment: widget.message.role == AppConstants.modelRoleName
           ? Alignment.centerLeft
           : Alignment.centerRight,
       child: StreamBuilder<bool>(
@@ -33,35 +45,36 @@ class AppChatBubble extends StatelessWidget {
                     horizontal: AppPadding.p15, vertical: AppPadding.p10),
                 margin: EdgeInsets.only(
                   bottom: AppPadding.p10,
-                  right: message.role == AppConstants.modelRoleName
+                  right: widget.message.role == AppConstants.modelRoleName
                       ? AppMargins.m40
                       : AppPadding.p10,
-                  left: message.role == AppConstants.modelRoleName
+                  left: widget.message.role == AppConstants.modelRoleName
                       ? AppPadding.p10
                       : AppMargins.m40,
                 ),
                 decoration: BoxDecoration(
-                  color: message.role == AppConstants.modelRoleName
+                  color: widget.message.role == AppConstants.modelRoleName
                       ? Theme.of(context).cardColor
                       : Theme.of(context).colorScheme.primary,
-                  borderRadius: message.role == AppConstants.modelRoleName
-                      ? const BorderRadius.only(
-                          bottomRight: Radius.circular(AppValues.v15),
-                          topRight: Radius.circular(AppValues.v15),
-                          topLeft: Radius.circular(AppValues.v15),
-                        )
-                      : const BorderRadius.only(
-                          bottomLeft: Radius.circular(AppValues.v15),
-                          topRight: Radius.circular(AppValues.v15),
-                          topLeft: Radius.circular(AppValues.v15),
-                        ),
+                  borderRadius:
+                      widget.message.role == AppConstants.modelRoleName
+                          ? const BorderRadius.only(
+                              bottomRight: Radius.circular(AppValues.v15),
+                              topRight: Radius.circular(AppValues.v15),
+                              topLeft: Radius.circular(AppValues.v15),
+                            )
+                          : const BorderRadius.only(
+                              bottomLeft: Radius.circular(AppValues.v15),
+                              topRight: Radius.circular(AppValues.v15),
+                              topLeft: Radius.circular(AppValues.v15),
+                            ),
                 ),
-                child: message.role == AppConstants.modelRoleName
+                child: widget.message.role == AppConstants.modelRoleName
                     ? Column(
                         children: [
                           RichText(
-                            text:
-                                _mainViewModel.formatText(message.msg, context),
+                            text: _mainViewModel.formatText(
+                                widget.message.msg, context),
                           ),
                           if (snapshot.data!) ...[
                             const SizedBox(height: AppPadding.p10),
@@ -73,17 +86,18 @@ class AppChatBubble extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       InkWell(
-                                        onTap: _textToSpeechImplementer
-                                                .isPlaying
-                                            ? () async {
-                                                await _textToSpeechImplementer
-                                                    .pause();
-                                              }
-                                            : () async {
-                                                await _textToSpeechImplementer
-                                                    .speak(
-                                                        message.msg, context);
-                                              },
+                                        onTap:
+                                            _textToSpeechImplementer.isPlaying
+                                                ? () async {
+                                                    await _textToSpeechImplementer
+                                                        .pause();
+                                                  }
+                                                : () async {
+                                                    await _textToSpeechImplementer
+                                                        .speak(
+                                                            widget.message.msg,
+                                                            context);
+                                                  },
                                         child: AnimatedIcon(
                                           progress: kAlwaysCompleteAnimation,
                                           icon:
@@ -95,18 +109,18 @@ class AppChatBubble extends StatelessWidget {
                                       if (_textToSpeechImplementer.isPlaying ||
                                           _textToSpeechImplementer
                                               .isPaused) ...[
-                                        // const SizedBox(width: AppPadding.p10),
-                                        // InkWell(
-                                        //   onTap: () {
-                                        //     _textToSpeechImplementer
-                                        //         .changeRate();
-                                        //   },
-                                        //   child: Icon(
-                                        //       _textToSpeechImplementer.rate ==
-                                        //               AppValues.v05
-                                        //           ? Icons.looks_two_outlined
-                                        //           : Icons.looks_two_rounded),
-                                        // ),
+                                        const SizedBox(width: AppPadding.p10),
+                                        InkWell(
+                                          onTap: () {
+                                            _textToSpeechImplementer
+                                                .changeRate(widget.message.msg);
+                                          },
+                                          child: Icon(
+                                              _textToSpeechImplementer.rate ==
+                                                      AppValues.v05
+                                                  ? Icons.looks_two_outlined
+                                                  : Icons.looks_two_rounded),
+                                        ),
                                         const SizedBox(width: AppPadding.p10),
                                         InkWell(
                                           onTap: () {
@@ -121,7 +135,7 @@ class AppChatBubble extends StatelessWidget {
                           ]
                         ],
                       )
-                    : Text(message.msg),
+                    : Text(widget.message.msg),
               ),
             );
           }),

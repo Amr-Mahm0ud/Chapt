@@ -16,6 +16,7 @@ class TextToSpeechImplementer {
   // *********************************************
   dispose() {
     _speakingState.close();
+    flutterTts.stop();
   }
 
   //variables for package usage
@@ -47,11 +48,6 @@ class TextToSpeechImplementer {
       inputState.add(ttsState);
     });
 
-    flutterTts.setPauseHandler(() {
-      ttsState = TtsState.paused;
-      inputState.add(ttsState);
-    });
-
     flutterTts.setContinueHandler(() {
       ttsState = TtsState.playing;
       inputState.add(ttsState);
@@ -63,6 +59,8 @@ class TextToSpeechImplementer {
     });
 
     flutterTts.setErrorHandler((message) {
+      ttsState = TtsState.stopped;
+      inputState.add(ttsState);
       buildSnackBar(context, message);
     });
 
@@ -100,11 +98,19 @@ class TextToSpeechImplementer {
   }
 
   Future<void> pause() async {
-    await flutterTts.pause();
+    final res = await flutterTts.pause();
+    if (res == 1) {
+      ttsState = TtsState.paused;
+      inputState.add(ttsState);
+    }
   }
 
-  // changeRate() {
-  //   rate = rate == AppValues.v05 ? AppValues.i1.toDouble() : AppValues.v05;
-  //   flutterTts.setSpeechRate(rate);
-  // }
+  changeRate(text) async {
+    rate = rate == AppValues.v05 ? AppValues.i1.toDouble() : AppValues.v05;
+    await flutterTts.pause();
+    await flutterTts.setSpeechRate(rate);
+    await flutterTts.speak(text);
+    ttsState = TtsState.playing;
+    inputState.add(ttsState);
+  }
 }

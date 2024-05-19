@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                     return IconButton(
                       icon: const Icon(Icons.send_rounded),
                       color: ColorManager.primary,
-                      onPressed: snapshot.data!
+                      onPressed: snapshot.data! && !_viewModel.isLoading
                           ? () async {
                               Future.delayed(const Duration(
                                       milliseconds: AppValues.i100))
