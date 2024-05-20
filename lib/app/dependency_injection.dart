@@ -7,7 +7,6 @@ import 'package:chapt/domain/repository/repository.dart';
 import 'package:chapt/domain/use_case/login_use_case.dart';
 import 'package:chapt/domain/use_case/send_message_use_case.dart';
 import 'package:chapt/domain/use_case/signup_use_case.dart';
-import 'package:chapt/presentation/services/text_to_speech.dart';
 import 'package:chapt/presentation/view_models/home/main_view_model.dart';
 import 'package:chapt/presentation/view_models/signin/signin_view_model.dart';
 import 'package:chapt/presentation/view_models/signup/signup_view_model.dart';
@@ -75,7 +74,5 @@ Future<void> initHomeModule() async {
         () => SendMessageUseCase(instance<Repository>()));
     instance.registerFactory<MainViewModel>(
         () => MainViewModel(instance<SendMessageUseCase>()));
-    instance.registerFactory<TextToSpeechImplementer>(
-        () => TextToSpeechImplementer());
   }
 }

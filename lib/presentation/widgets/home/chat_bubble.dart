@@ -17,7 +17,7 @@ class AppChatBubble extends StatefulWidget {
 class _AppChatBubbleState extends State<AppChatBubble> {
   final MainViewModel _mainViewModel = instance<MainViewModel>();
   final TextToSpeechImplementer _textToSpeechImplementer =
-      instance<TextToSpeechImplementer>();
+      TextToSpeechImplementer();
 
   @override
   void dispose() {
