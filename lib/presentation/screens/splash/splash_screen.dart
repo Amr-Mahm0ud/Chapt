@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   final AppPreferences _appPreferences = instance<AppPreferences>();
 
   _startTimer() {
-    _timer = Timer(const Duration(seconds: AppValues.i2), _moveToNext);
+    _timer = Timer(const Duration(seconds: AppValues.i1), _moveToNext);
   }
 
   _moveToNext() {

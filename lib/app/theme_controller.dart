@@ -25,7 +25,5 @@ class ThemeController extends BaseViewModel {
   }
 
   @override
-  void dispose() {
-    _themeController.close();
-  }
+  void dispose() {}
 }

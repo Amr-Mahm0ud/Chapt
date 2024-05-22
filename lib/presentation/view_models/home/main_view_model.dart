@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:chapt/app/app_constants.dart';
@@ -24,7 +26,7 @@ class MainViewModel extends BaseViewModel
   //APPMENU controller
   final Set<String> appMenu = {
     AppStrings.clearChat,
-    AppStrings.darkTheme,
+    AppStrings.changeTheme,
     AppStrings.logout
   };
   //*************************************** */

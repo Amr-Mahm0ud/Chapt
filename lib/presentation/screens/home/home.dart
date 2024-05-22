@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
               _appPreferences.logout(context);
             } else if (val == AppStrings.clearChat) {
               _viewModel.clearChat();
-            } else if (val == AppStrings.darkTheme) {
+            } else if (val == AppStrings.changeTheme) {
               _themeController.changeTheme();
             }
           },

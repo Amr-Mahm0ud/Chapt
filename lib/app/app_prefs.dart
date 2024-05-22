@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:chapt/presentation/screens/onboarding/onboarding_screen.dart';
+import 'package:chapt/presentation/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,12 +36,7 @@ class AppPreferences {
   Future<void> logout(context) async {
     await _sharedPreferences.remove(prefsKeyIsUserLoggedIn);
     await _sharedPreferences.remove(prefsKeyOnboardingScreenViewed);
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const OnboardingScreen(),
-        ),
-        (route) => false);
+    Navigator.pushReplacementNamed(context, Routes.splash);
   }
   //******************************************** */
 

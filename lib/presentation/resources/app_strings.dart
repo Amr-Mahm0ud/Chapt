@@ -46,5 +46,5 @@ class AppStrings {
   //APPMENU texts
   static const logout = 'Logout';
   static const clearChat = 'Clear Chat';
-  static const darkTheme = 'DarkTheme';
+  static const changeTheme = 'changeTheme';
 }
