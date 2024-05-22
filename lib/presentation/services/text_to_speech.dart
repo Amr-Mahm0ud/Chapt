@@ -14,9 +14,9 @@ class TextToSpeechImplementer {
   TtsState ttsState = TtsState.stopped;
 
   // *********************************************
-  dispose() {
-    _speakingState.close();
-    flutterTts.stop();
+  dispose() async {
+    await flutterTts.stop();
+    await _speakingState.close();
   }
 
   //variables for package usage
@@ -43,9 +43,8 @@ class TextToSpeechImplementer {
     await flutterTts.setSpeechRate(rate);
     await flutterTts.setPitch(pitch);
 
-    flutterTts.setCompletionHandler(() {
-      ttsState = TtsState.stopped;
-      inputState.add(ttsState);
+    flutterTts.setCompletionHandler(() async {
+      await stop();
     });
 
     flutterTts.setContinueHandler(() {
@@ -53,9 +52,8 @@ class TextToSpeechImplementer {
       inputState.add(ttsState);
     });
 
-    flutterTts.setCancelHandler(() {
-      ttsState = TtsState.stopped;
-      inputState.add(ttsState);
+    flutterTts.setCancelHandler(() async {
+      await stop();
     });
 
     flutterTts.setErrorHandler((message) {

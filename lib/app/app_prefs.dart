@@ -1,3 +1,5 @@
+import 'package:chapt/presentation/screens/onboarding/onboarding_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String prefsKeyOnboardingScreenViewed =
@@ -29,8 +31,14 @@ class AppPreferences {
     return _sharedPreferences.getBool(prefsKeyIsUserLoggedIn) ?? false;
   }
 
-  Future<void> logout() async {
+  Future<void> logout(context) async {
     await _sharedPreferences.remove(prefsKeyIsUserLoggedIn);
     await _sharedPreferences.remove(prefsKeyOnboardingScreenViewed);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const OnboardingScreen(),
+        ),
+        (route) => false);
   }
 }

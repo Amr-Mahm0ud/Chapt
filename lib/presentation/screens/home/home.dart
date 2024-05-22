@@ -56,6 +56,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBodySection(context),
+      // drawer: buildDrawer(),
     );
   }
 
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
           elevation: AppValues.v05,
           onSelected: (val) {
             if (val == 'Logout') {
-              _appPreferences.logout();
+              _appPreferences.logout(context);
             } else if (val == 'Clear Chat') {
               _viewModel.clearChat();
             } else {}
@@ -107,65 +108,68 @@ class _HomePageState extends State<HomePage> {
         child: Container(
           color: Theme.of(context).cardColor.withOpacity(AppValues.v025),
           padding: const EdgeInsets.all(AppPadding.p10),
-          child: Column(
-            children: [
-              AppInputField(
-                hint: AppStrings.writeMsg,
-                controller: _messageController,
-                filled: false,
-                haveErrorText: false,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppValues.v50),
-                  borderSide: BorderSide.none,
-                ),
-                action: StreamBuilder<bool>(
-                    initialData: false,
-                    stream: _speechToTextImplementer.outputListening,
-                    builder: (context, isListening) {
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (isListening.data!)
-                            IconButton(
-                              onPressed: () async {
-                                await _speechToTextImplementer
-                                    .cancelListening()
-                                    .then(
-                                      (value) => _messageController.clear(),
-                                    );
-                              },
-                              color: Theme.of(context).disabledColor,
-                              icon: const Icon(Icons.close),
+          child: AppInputField(
+            type: TextInputType.multiline,
+            hint: AppStrings.writeMsg,
+            controller: _messageController,
+            filled: false,
+            haveErrorText: false,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppValues.v50),
+              borderSide: BorderSide.none,
+            ),
+            action: StreamBuilder<bool>(
+                initialData: false,
+                stream: _speechToTextImplementer.outputListening,
+                builder: (context, isListening) {
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (isListening.data!)
+                        IconButton(
+                          onPressed: () async {
+                            await _speechToTextImplementer
+                                .cancelListening()
+                                .then(
+                                  (value) => _messageController.clear(),
+                                );
+                          },
+                          color: Theme.of(context).disabledColor,
+                          icon: const Icon(Icons.close),
+                        ),
+                      StreamBuilder<bool>(
+                        stream: _viewModel.outputMessage,
+                        initialData: false,
+                        builder: (context, snapshot) {
+                          return IconButton(
+                            icon: Icon(
+                              snapshot.data!
+                                  ? Icons.send_rounded
+                                  : isListening.data!
+                                      ? Icons.mic
+                                      : Icons.mic_none,
                             ),
-                          StreamBuilder<bool>(
-                            stream: _viewModel.outputMessage,
-                            initialData: false,
-                            builder: (context, snapshot) {
-                              return IconButton(
-                                icon: Icon(
-                                  snapshot.data!
-                                      ? Icons.send_rounded
-                                      : isListening.data!
-                                          ? Icons.mic
-                                          : Icons.mic_none,
-                                ),
-                                color: snapshot.data! || isListening.data!
-                                    ? ColorManager.primary
-                                    : Theme.of(context).disabledColor,
-                                onPressed: snapshot.data! &&
-                                        !_viewModel.isLoading
+                            color: snapshot.data! || isListening.data!
+                                ? ColorManager.primary
+                                : Theme.of(context).disabledColor,
+                            onPressed: snapshot.data! && !_viewModel.isLoading
+                                ? () async {
+                                    Future.delayed(const Duration(
+                                            milliseconds: AppValues.i100))
+                                        .then((value) =>
+                                            _messageController.clear());
+                                    await _viewModel.sendMessage(context);
+                                    _scrollController.animateTo(
+                                        _scrollController
+                                            .position.maxScrollExtent,
+                                        duration: const Duration(
+                                            milliseconds: AppValues.i300),
+                                        curve: Curves.linear);
+                                  }
+                                : isListening.data!
                                     ? () async {
-                                        Future.delayed(const Duration(
-                                                milliseconds: AppValues.i100))
-                                            .then((value) =>
-                                                _messageController.clear());
-                                        await _viewModel.sendMessage(context);
-                                        _scrollController.animateTo(
-                                            _scrollController
-                                                .position.maxScrollExtent,
-                                            duration: const Duration(
-                                                milliseconds: AppValues.i300),
-                                            curve: Curves.linear);
+                                        await _speechToTextImplementer
+                                            .stopListening();
                                       }
                                     : () async {
                                         await _speechToTextImplementer
@@ -182,14 +186,12 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                             );
                                       },
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    }),
-              ),
-            ],
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                }),
           ),
         ),
       ),

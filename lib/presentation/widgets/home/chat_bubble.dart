@@ -95,7 +95,11 @@ class _AppChatBubbleState extends State<AppChatBubble> {
                                                 : () async {
                                                     await _textToSpeechImplementer
                                                         .speak(
-                                                            widget.message.msg,
+                                                            _mainViewModel
+                                                                .formatMessageAsString(
+                                                                    widget
+                                                                        .message
+                                                                        .msg),
                                                             context);
                                                   },
                                         child: AnimatedIcon(
@@ -112,8 +116,12 @@ class _AppChatBubbleState extends State<AppChatBubble> {
                                         const SizedBox(width: AppPadding.p10),
                                         InkWell(
                                           onTap: () {
-                                            _textToSpeechImplementer
-                                                .changeRate(widget.message.msg);
+                                            _textToSpeechImplementer.changeRate(
+                                              _mainViewModel
+                                                  .formatMessageAsString(
+                                                widget.message.msg,
+                                              ),
+                                            );
                                           },
                                           child: Icon(
                                               _textToSpeechImplementer.rate ==

@@ -79,6 +79,11 @@ class SpeechToTextImplementer {
     );
   }
 
+  Future<void> stopListening() async {
+    await speech.stop();
+    _inputListening.add(false);
+  }
+
   Future<void> cancelListening() async {
     await speech.cancel();
     _inputListening.add(false);

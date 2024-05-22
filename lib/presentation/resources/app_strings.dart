@@ -32,7 +32,7 @@ class AppStrings {
   static const nameRep = "User Name is required";
   static const phoneReq = "Phone Number is required";
   //home page Texts
-  static const welcome = 'welcome';
+  static const welcome = 'Welcome';
   static const askQuestion = 'Hello, You can ask Gemini about anything';
   static const canIHelp = 'How can I help you?';
   //home page input text

@@ -48,11 +48,12 @@ class MainViewModel extends BaseViewModel
   }
 
   // format response Message
+  // ******************************
+  
   TextSpan formatText(String text, context) {
     RegExp regex = RegExp(r'\*\*(.*?)\*\*');
     //to add every splited text
     List<TextSpan> spans = [];
-
     //decide if it a title or regular text
     text.splitMapJoin(
       regex,
@@ -79,6 +80,28 @@ class MainViewModel extends BaseViewModel
       },
     );
     return TextSpan(children: spans);
+  }
+
+  String formatMessageAsString(String text) {
+    RegExp regex = RegExp(r'\*\*(.*?)\*\*');
+    //to add every splited text
+    String speechText = '';
+
+    //decide if it a title or regular text
+    text.splitMapJoin(
+      regex,
+      onMatch: (Match match) {
+        speechText = speechText + match.group(1).toString();
+        return '';
+      },
+      onNonMatch: (String text) {
+        speechText = speechText + text;
+        return '';
+      },
+    );
+    speechText = speechText.replaceAll('*', '');
+    speechText = speechText.replaceAll("'", '');
+    return speechText;
   }
 
   //************************************************************* */
@@ -109,6 +132,7 @@ class MainViewModel extends BaseViewModel
           .fold((failure) async {
         isLoading = false;
         _oldMessages.removeLast();
+        inputAllMessages.add([..._oldMessages.map((msg) => msg)]);
         PopupError.showErrorDialog(context, failure.message);
         return {};
       }, (data) async {
