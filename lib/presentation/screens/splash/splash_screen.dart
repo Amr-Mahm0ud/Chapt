@@ -24,19 +24,18 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _moveToNext() {
-    _appPreferences.isUserLoggedIn().then((isLoggedin) {
-      if (isLoggedin) {
-        Navigator.pushReplacementNamed(context, Routes.home);
-      } else {
-        // _appPreferences.isOnBoardingScreenViewed().then((isOnboardingViewed) {
-          // if (isOnboardingViewed) {
-          //   Navigator.pushReplacementNamed(context, Routes.signup);
-          // } else {
-            Navigator.pushReplacementNamed(context, Routes.onboarding);
-          // }
-        // });
-      }
-    });
+    final bool isLoggedin = _appPreferences.isUserLoggedIn();
+    if (isLoggedin) {
+      Navigator.pushReplacementNamed(context, Routes.home);
+    } else {
+      // _appPreferences.isOnBoardingScreenViewed().then((isOnboardingViewed) {
+      // if (isOnboardingViewed) {
+      //   Navigator.pushReplacementNamed(context, Routes.signup);
+      // } else {
+      Navigator.pushReplacementNamed(context, Routes.onboarding);
+      // }
+      // });
+    }
   }
 
   @override

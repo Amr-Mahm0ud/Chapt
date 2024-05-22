@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:chapt/presentation/common/popup_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-
-import '../resources/values_manager.dart';
 
 class SpeechToTextImplementer {
   //variables to handle package functions
@@ -30,36 +28,18 @@ class SpeechToTextImplementer {
   }
 
   // ****************************************************
-  //UI handling functions
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> buildSnackBar(
-      context, message) {
-    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      backgroundColor: Theme.of(context).primaryColor,
-      behavior: SnackBarBehavior.floating,
-      elevation: AppValues.v05,
-      margin: const EdgeInsets.all(AppPadding.p10),
-      shape: const StadiumBorder(),
-      content: Row(
-        children: [
-          const Icon(Icons.error),
-          const SizedBox(width: AppPadding.p10),
-          Text(message),
-        ],
-      ),
-    ));
-  }
-
-  // ****************************************************
   //Package Functions
   Future<void> initSpeechState(context) async {
     try {
       await speech.initialize(
         onError: (errorNotification) {
-          buildSnackBar(context, errorNotification);
+          PopupError.showErrorDialog(context, errorNotification.errorMsg);
+          _inputListening.add(false);
         },
       );
     } catch (error) {
-      buildSnackBar(context, error.toString());
+      PopupError.showErrorDialog(context, error.toString());
+      _inputListening.add(false);
     }
   }
 
@@ -69,7 +49,7 @@ class SpeechToTextImplementer {
     final options = SpeechListenOptions(
       listenMode: ListenMode.dictation,
       cancelOnError: true,
-      partialResults: true,
+      partialResults: false,
       autoPunctuation: true,
       enableHapticFeedback: true,
     );
@@ -87,11 +67,11 @@ class SpeechToTextImplementer {
   Future<void> cancelListening() async {
     await speech.cancel();
     _inputListening.add(false);
+    _inputText.add('');
   }
 
   Future<void> resultListener(SpeechRecognitionResult result) async {
     _inputText.add(result.recognizedWords);
-    await Future.delayed(const Duration(milliseconds: AppValues.i300))
-        .then((value) => _inputListening.add(false));
+    _inputListening.add(false);
   }
 }

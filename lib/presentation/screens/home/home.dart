@@ -1,5 +1,6 @@
 import 'package:chapt/app/app_prefs.dart';
 import 'package:chapt/app/dependency_injection.dart';
+import 'package:chapt/app/theme_controller.dart';
 import 'package:chapt/domain/models/models.dart';
 import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/resources/color_manager.dart';
@@ -25,6 +26,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final MainViewModel _viewModel = instance<MainViewModel>();
   final AppPreferences _appPreferences = instance<AppPreferences>();
+  final ThemeController _themeController = instance<ThemeController>();
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final SpeechToTextImplementer _speechToTextImplementer =
@@ -47,6 +49,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _viewModel.dispose();
+    _themeController.dispose();
+    _messageController.dispose();
+    _scrollController.dispose();
     _speechToTextImplementer.dispose();
     super.dispose();
   }
@@ -56,7 +61,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: _buildAppBar(),
       body: _buildBodySection(context),
-      // drawer: buildDrawer(),
     );
   }
 
@@ -74,14 +78,16 @@ class _HomePageState extends State<HomePage> {
           position: PopupMenuPosition.under,
           elevation: AppValues.v05,
           onSelected: (val) {
-            if (val == 'Logout') {
+            if (val == AppStrings.logout) {
               _appPreferences.logout(context);
-            } else if (val == 'Clear Chat') {
+            } else if (val == AppStrings.clearChat) {
               _viewModel.clearChat();
-            } else {}
+            } else if (val == AppStrings.darkTheme) {
+              _themeController.changeTheme();
+            }
           },
           itemBuilder: (BuildContext context) {
-            return {'Logout', 'Clear Chat', 'Settings'}.map((String choice) {
+            return _viewModel.appMenu.map((String choice) {
               return PopupMenuItem<String>(
                 padding: const EdgeInsets.symmetric(
                     horizontal: AppPadding.p25, vertical: AppPadding.p15),
@@ -118,80 +124,83 @@ class _HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.circular(AppValues.v50),
               borderSide: BorderSide.none,
             ),
-            action: StreamBuilder<bool>(
-                initialData: false,
-                stream: _speechToTextImplementer.outputListening,
-                builder: (context, isListening) {
-                  return Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (isListening.data!)
-                        IconButton(
-                          onPressed: () async {
-                            await _speechToTextImplementer
-                                .cancelListening()
-                                .then(
-                                  (value) => _messageController.clear(),
-                                );
-                          },
-                          color: Theme.of(context).disabledColor,
-                          icon: const Icon(Icons.close),
-                        ),
-                      StreamBuilder<bool>(
-                        stream: _viewModel.outputMessage,
-                        initialData: false,
-                        builder: (context, snapshot) {
-                          return IconButton(
-                            icon: Icon(
-                              snapshot.data!
-                                  ? Icons.send_rounded
-                                  : isListening.data!
-                                      ? Icons.mic
-                                      : Icons.mic_none,
+            action: _viewModel.isLoading
+                ? null
+                : StreamBuilder<bool>(
+                    initialData: false,
+                    stream: _speechToTextImplementer.outputListening,
+                    builder: (context, isListening) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (isListening.data!)
+                            IconButton(
+                              onPressed: () async {
+                                await _speechToTextImplementer
+                                    .cancelListening()
+                                    .then(
+                                      (value) => _messageController.clear(),
+                                    );
+                              },
+                              color: Theme.of(context).disabledColor,
+                              icon: const Icon(Icons.close),
                             ),
-                            color: snapshot.data! || isListening.data!
-                                ? ColorManager.primary
-                                : Theme.of(context).disabledColor,
-                            onPressed: snapshot.data! && !_viewModel.isLoading
-                                ? () async {
-                                    Future.delayed(const Duration(
-                                            milliseconds: AppValues.i100))
-                                        .then((value) =>
-                                            _messageController.clear());
-                                    await _viewModel.sendMessage(context);
-                                    _scrollController.animateTo(
-                                        _scrollController
-                                            .position.maxScrollExtent,
-                                        duration: const Duration(
-                                            milliseconds: AppValues.i300),
-                                        curve: Curves.linear);
-                                  }
-                                : isListening.data!
+                          StreamBuilder<bool>(
+                            stream: _viewModel.outputMessage,
+                            initialData: false,
+                            builder: (context, snapshot) {
+                              return IconButton(
+                                icon: Icon(
+                                  snapshot.data! && !(isListening.data!)
+                                      ? Icons.send_rounded
+                                      : isListening.data!
+                                          ? Icons.mic
+                                          : Icons.mic_none,
+                                ),
+                                color: snapshot.data! || isListening.data!
+                                    ? ColorManager.primary
+                                    : Theme.of(context).disabledColor,
+                                onPressed: snapshot.data! &&
+                                        !_viewModel.isLoading
                                     ? () async {
-                                        await _speechToTextImplementer
-                                            .stopListening();
+                                        Future.delayed(const Duration(
+                                                milliseconds: AppValues.i100))
+                                            .then((value) =>
+                                                _messageController.clear());
+                                        await _viewModel.sendMessage(context);
+                                        _scrollController.animateTo(
+                                            _scrollController
+                                                .position.maxScrollExtent,
+                                            duration: const Duration(
+                                                milliseconds: AppValues.i300),
+                                            curve: Curves.linear);
                                       }
-                                    : () async {
-                                        await _speechToTextImplementer
-                                            .startListening()
-                                            .then(
-                                              (value) =>
-                                                  _speechToTextImplementer
-                                                      .outPutText
-                                                      .listen(
-                                                (value) {
-                                                  _messageController.text =
-                                                      value;
-                                                },
-                                              ),
-                                            );
-                                      },
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                }),
+                                    : isListening.data!
+                                        ? () async {
+                                            await _speechToTextImplementer
+                                                .stopListening();
+                                          }
+                                        : () async {
+                                            await _speechToTextImplementer
+                                                .startListening()
+                                                .then(
+                                                  (value) =>
+                                                      _speechToTextImplementer
+                                                          .outPutText
+                                                          .listen(
+                                                    (value) {
+                                                      _messageController.text =
+                                                          value;
+                                                    },
+                                                  ),
+                                                );
+                                          },
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    }),
           ),
         ),
       ),

@@ -47,6 +47,12 @@ class _MyWidgetState extends State<AppInputField> {
         suffixIcon: widget.action,
         filled: widget.filled,
         hintText: widget.hint,
+        hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+            color: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .color!
+                .withOpacity(AppValues.v05)),
         errorText: widget.haveErrorText ? widget.errorText : null,
         contentPadding: const EdgeInsets.symmetric(
             vertical: AppPadding.p10, horizontal: AppPadding.p10),

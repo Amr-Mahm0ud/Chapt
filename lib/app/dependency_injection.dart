@@ -1,3 +1,4 @@
+import 'package:chapt/app/theme_controller.dart';
 import 'package:chapt/data/data_source/remote_data_source.dart';
 import 'package:chapt/data/network/api/app_api.dart';
 import 'package:chapt/data/network/dio_factory.dart';
@@ -48,6 +49,9 @@ Future<void> initAppModule() async {
   //Repository
   instance.registerLazySingleton<Repository>(() =>
       RepositoryImp(instance<NetworkState>(), instance<RemoteDataSource>()));
+
+  //Theme Controller
+  instance.registerLazySingleton<ThemeController>(() => ThemeController());
 }
 
 Future<void> initLoginModule() async {

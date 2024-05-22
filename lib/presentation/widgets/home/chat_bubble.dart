@@ -1,6 +1,7 @@
 import 'package:chapt/app/app_constants.dart';
 import 'package:chapt/app/dependency_injection.dart';
 import 'package:chapt/domain/models/models.dart';
+import 'package:chapt/presentation/resources/color_manager.dart';
 import 'package:chapt/presentation/resources/values_manager.dart';
 import 'package:chapt/presentation/services/text_to_speech.dart';
 import 'package:chapt/presentation/view_models/home/main_view_model.dart';
@@ -86,22 +87,21 @@ class _AppChatBubbleState extends State<AppChatBubble> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       InkWell(
-                                        onTap:
-                                            _textToSpeechImplementer.isPlaying
-                                                ? () async {
-                                                    await _textToSpeechImplementer
-                                                        .pause();
-                                                  }
-                                                : () async {
-                                                    await _textToSpeechImplementer
-                                                        .speak(
-                                                            _mainViewModel
-                                                                .formatMessageAsString(
-                                                                    widget
-                                                                        .message
-                                                                        .msg),
-                                                            context);
-                                                  },
+                                        onTap: _textToSpeechImplementer
+                                                .isPlaying
+                                            ? () async {
+                                                await _textToSpeechImplementer
+                                                    .pause();
+                                              }
+                                            : () async {
+                                                await _textToSpeechImplementer
+                                                    .speak(
+                                                        widget.message.msg
+                                                            .replaceAll('*', '')
+                                                            .replaceAll(
+                                                                '`', ''),
+                                                        context);
+                                              },
                                         child: AnimatedIcon(
                                           progress: kAlwaysCompleteAnimation,
                                           icon:
@@ -117,10 +117,9 @@ class _AppChatBubbleState extends State<AppChatBubble> {
                                         InkWell(
                                           onTap: () {
                                             _textToSpeechImplementer.changeRate(
-                                              _mainViewModel
-                                                  .formatMessageAsString(
-                                                widget.message.msg,
-                                              ),
+                                              widget.message.msg
+                                                  .replaceAll('*', '')
+                                                  .replaceAll('`', ''),
                                             );
                                           },
                                           child: Icon(
@@ -143,7 +142,13 @@ class _AppChatBubbleState extends State<AppChatBubble> {
                           ]
                         ],
                       )
-                    : Text(widget.message.msg),
+                    : Text(
+                        widget.message.msg,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: ColorManager.backglight),
+                      ),
               ),
             );
           }),

@@ -4,6 +4,7 @@ import 'package:chapt/app/app_constants.dart';
 import 'package:chapt/domain/models/models.dart';
 import 'package:chapt/domain/use_case/send_message_use_case.dart';
 import 'package:chapt/presentation/common/freezed_data_classes.dart';
+import 'package:chapt/presentation/resources/app_strings.dart';
 import 'package:chapt/presentation/view_models/base/base_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,14 @@ class MainViewModel extends BaseViewModel
 
   final StreamController<List<Message>> _allMessagesStreamController =
       StreamController.broadcast();
+
+  //APPMENU controller
+  final Set<String> appMenu = {
+    AppStrings.clearChat,
+    AppStrings.darkTheme,
+    AppStrings.logout
+  };
+  //*************************************** */
 
   final List<Message> _oldMessages = <Message>[];
 
@@ -49,7 +58,7 @@ class MainViewModel extends BaseViewModel
 
   // format response Message
   // ******************************
-  
+
   TextSpan formatText(String text, context) {
     RegExp regex = RegExp(r'\*\*(.*?)\*\*');
     //to add every splited text
@@ -69,10 +78,10 @@ class MainViewModel extends BaseViewModel
         );
         return '';
       },
-      onNonMatch: (String text) {
+      onNonMatch: (normalText) {
         spans.add(
           TextSpan(
-            text: text,
+            text: normalText,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         );
@@ -81,29 +90,6 @@ class MainViewModel extends BaseViewModel
     );
     return TextSpan(children: spans);
   }
-
-  String formatMessageAsString(String text) {
-    RegExp regex = RegExp(r'\*\*(.*?)\*\*');
-    //to add every splited text
-    String speechText = '';
-
-    //decide if it a title or regular text
-    text.splitMapJoin(
-      regex,
-      onMatch: (Match match) {
-        speechText = speechText + match.group(1).toString();
-        return '';
-      },
-      onNonMatch: (String text) {
-        speechText = speechText + text;
-        return '';
-      },
-    );
-    speechText = speechText.replaceAll('*', '');
-    speechText = speechText.replaceAll("'", '');
-    return speechText;
-  }
-
   //************************************************************* */
   //view model inputs functions
 
@@ -134,7 +120,6 @@ class MainViewModel extends BaseViewModel
         _oldMessages.removeLast();
         inputAllMessages.add([..._oldMessages.map((msg) => msg)]);
         PopupError.showErrorDialog(context, failure.message);
-        return {};
       }, (data) async {
         isLoading = false;
         _oldMessages.add(data);

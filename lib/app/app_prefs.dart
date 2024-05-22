@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chapt/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 const String prefsKeyOnboardingScreenViewed =
     "PREFS_KEY_ONBOARDING_SCREEN_VIEWED";
 const String prefsKeyIsUserLoggedIn = "PREFS_KEY_IS_USER_LOGGED_IN";
+const String prefsKeyIsDarkTHeme = "PREFS_KEY_IS_DARK_THEME";
 
 class AppPreferences {
   final SharedPreferences _sharedPreferences;
@@ -12,22 +15,21 @@ class AppPreferences {
   AppPreferences(this._sharedPreferences);
 
   // on boarding
-
   Future<void> setOnBoardingScreenViewed() async {
-    _sharedPreferences.setBool(prefsKeyOnboardingScreenViewed, true);
+    await _sharedPreferences.setBool(prefsKeyOnboardingScreenViewed, true);
   }
 
-  Future<bool> isOnBoardingScreenViewed() async {
+  bool isOnBoardingScreenViewed() {
     return _sharedPreferences.getBool(prefsKeyOnboardingScreenViewed) ?? false;
   }
+  //********************************************* */
 
   //login
-
   Future<void> setUserLoggedIn() async {
-    _sharedPreferences.setBool(prefsKeyIsUserLoggedIn, true);
+    await _sharedPreferences.setBool(prefsKeyIsUserLoggedIn, true);
   }
 
-  Future<bool> isUserLoggedIn() async {
+  bool isUserLoggedIn() {
     return _sharedPreferences.getBool(prefsKeyIsUserLoggedIn) ?? false;
   }
 
@@ -41,4 +43,12 @@ class AppPreferences {
         ),
         (route) => false);
   }
+  //******************************************** */
+
+  //THEME
+  Future<void> changeTheme() async {
+    await _sharedPreferences.setBool(prefsKeyIsDarkTHeme, !getTheme());
+  }
+
+  bool getTheme() => _sharedPreferences.getBool(prefsKeyIsDarkTHeme) ?? false;
 }

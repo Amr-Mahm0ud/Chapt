@@ -107,7 +107,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 Navigator.pushReplacementNamed(
                                     context, Routes.signup);
                               },
-                              content: const Text(AppStrings.skip),
+                              content: Text(AppStrings.skip,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .color)),
                               color: Theme.of(context).colorScheme.secondary,
                               rounded: true,
                             ),
