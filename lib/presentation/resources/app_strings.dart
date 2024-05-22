@@ -39,6 +39,7 @@ class AppStrings {
   static const welcome = 'Welcome';
   static const askQuestion = 'Hello, You can ask Gemini about anything';
   static const canIHelp = 'How can I help you?';
+  static const simpleCode = 'This is a Simple Code Example';
 
   //home page input text
   static const writeMsg = 'write your message';

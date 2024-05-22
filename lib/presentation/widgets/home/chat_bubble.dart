@@ -72,11 +72,12 @@ class _AppChatBubbleState extends State<AppChatBubble> {
                 ),
                 child: widget.message.role == AppConstants.modelRoleName
                     ? Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          RichText(
-                            text: _mainViewModel.formatText(
-                                widget.message.msg, context),
-                          ),
+                          ..._mainViewModel.formatText(
+                              widget.message.msg, context),
                           if (snapshot.data!) ...[
                             const SizedBox(height: AppPadding.p10),
                             StreamBuilder<TtsState>(

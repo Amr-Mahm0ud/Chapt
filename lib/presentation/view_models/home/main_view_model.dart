@@ -7,6 +7,7 @@ import 'package:chapt/domain/models/models.dart';
 import 'package:chapt/domain/use_case/send_message_use_case.dart';
 import 'package:chapt/presentation/common/freezed_data_classes.dart';
 import 'package:chapt/presentation/resources/app_strings.dart';
+import 'package:chapt/presentation/resources/values_manager.dart';
 import 'package:chapt/presentation/view_models/base/base_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -61,17 +62,18 @@ class MainViewModel extends BaseViewModel
   // format response Message
   // ******************************
 
-  TextSpan formatText(String text, context) {
+  List<Widget> formatText(String text, context) {
+    text = text.replaceAll('\n\n', '\n');
     RegExp regex = RegExp(r'\*\*(.*?)\*\*');
     //to add every splited text
-    List<TextSpan> spans = [];
+    List<Widget> spans = [];
     //decide if it a title or regular text
     text.splitMapJoin(
       regex,
       onMatch: (Match match) {
         spans.add(
-          TextSpan(
-            text: match.group(1),
+          Text(
+            match.group(1).toString(),
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge!
@@ -80,17 +82,46 @@ class MainViewModel extends BaseViewModel
         );
         return '';
       },
-      onNonMatch: (normalText) {
-        spans.add(
-          TextSpan(
-            text: normalText,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+      onNonMatch: (restText) {
+        regex = RegExp(r'```(.*?)```', dotAll: true);
+        restText.splitMapJoin(
+          regex,
+          onMatch: (Match match) {
+            spans.add(
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(AppPadding.p10),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.background,
+                  borderRadius: BorderRadius.circular(AppValues.v10),
+                ),
+                child: Text(
+                  match.group(1).toString().trim(),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
+              ),
+            );
+            return '';
+          },
+          onNonMatch: (normalText) {
+            spans.add(
+              Text(
+                normalText,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            );
+            return '';
+          },
         );
         return '';
       },
     );
-    return TextSpan(children: spans);
+    for (var element in spans) {
+      print(element);
+    }
+    return spans;
   }
   //************************************************************* */
   //view model inputs functions
