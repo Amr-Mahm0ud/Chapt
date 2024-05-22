@@ -103,33 +103,41 @@ class MainViewModel extends BaseViewModel
   Sink get inputShowTts => _showTtsController.sink;
 
   @override
-  sendMessage(context) async {
+  Future<bool> sendMessage(BuildContext context) async {
     try {
       isLoading = true;
       _sendMessageObject = _sendMessageObject
           .copyWith(oldMsgs: [..._oldMessages.map((msg) => msg)]);
       _oldMessages.add(Message(_sendMessageObject.msg, 'user'));
       inputAllMessages.add([..._oldMessages.map((msg) => msg)]);
-
       (await _sendMessageUseCase.excute(
         SendMessageUseCaseInput(
             _sendMessageObject.msg, _sendMessageObject.oldMsgs),
       ))
-          .fold((failure) async {
+          .fold((failure) {
         isLoading = false;
         _oldMessages.removeLast();
         inputAllMessages.add([..._oldMessages.map((msg) => msg)]);
         PopupError.showErrorDialog(context, failure.message);
-      }, (data) async {
+        return false;
+      }, (data) {
         isLoading = false;
         _oldMessages.add(data);
         inputAllMessages.add([..._oldMessages.map((msg) => msg)]);
         _sendMessageObject = _sendMessageObject
             .copyWith(oldMsgs: [..._oldMessages.map((msg) => msg)]);
+        return true;
       });
     } catch (error) {
+      isLoading = false;
+      if (_oldMessages.isNotEmpty && _oldMessages.last.role == 'user') {
+        _oldMessages.removeLast();
+      }
+      inputAllMessages.add([..._oldMessages.map((msg) => msg)]);
       PopupError.showErrorDialog(context, error.toString());
+      return false;
     }
+    return false;
   }
 
   @override
@@ -169,7 +177,7 @@ class MainViewModel extends BaseViewModel
 
 abstract class MainViewModelInputs extends BaseViewModelInputs {
   setMessage(value);
-  sendMessage(context);
+  sendMessage(BuildContext context);
   setShowTts();
   Sink<String> get inputMessage;
   Sink get inputAllMessages;

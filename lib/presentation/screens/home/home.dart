@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                 : StreamBuilder<bool>(
                     initialData: false,
                     stream: _speechToTextImplementer.outputListening,
-                    builder: (context, isListening) {
+                    builder: (_, isListening) {
                       return Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                           StreamBuilder<bool>(
                             stream: _viewModel.outputMessage,
                             initialData: false,
-                            builder: (context, snapshot) {
+                            builder: (_, snapshot) {
                               return IconButton(
                                 icon: Icon(
                                   snapshot.data! && !(isListening.data!)
@@ -167,13 +167,21 @@ class _HomePageState extends State<HomePage> {
                                                 milliseconds: AppValues.i100))
                                             .then((value) =>
                                                 _messageController.clear());
-                                        await _viewModel.sendMessage(context);
-                                        _scrollController.animateTo(
-                                            _scrollController
-                                                .position.maxScrollExtent,
-                                            duration: const Duration(
-                                                milliseconds: AppValues.i300),
-                                            curve: Curves.linear);
+                                        await _viewModel
+                                            .sendMessage(context)
+                                            .then(
+                                          (value) {
+                                            if (value) {
+                                              _scrollController.animateTo(
+                                                  _scrollController
+                                                      .position.maxScrollExtent,
+                                                  duration: const Duration(
+                                                      milliseconds:
+                                                          AppValues.i300),
+                                                  curve: Curves.linear);
+                                            }
+                                          },
+                                        );
                                       }
                                     : isListening.data!
                                         ? () async {
