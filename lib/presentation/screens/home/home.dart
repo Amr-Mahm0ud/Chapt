@@ -66,12 +66,10 @@ class _HomePageState extends State<HomePage> {
 
   _buildAppBar() {
     return AppBar(
-      title: const Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(width: AppPadding.p10),
-          Text('${AppStrings.welcome}, Amr'),
-        ],
+      centerTitle: true,
+      title: SvgPicture.asset(
+        AssetsManager.onboarding2,
+        height: MediaQuery.of(context).padding.top,
       ),
       actions: [
         PopupMenuButton<String>(
@@ -224,21 +222,12 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          AssetsManager.onboarding2,
-                          width: AppValues.getWidth(context) * AppValues.v025,
-                        ),
-                        const SizedBox(height: AppValues.v20),
-                        Text(
-                          AppStrings.askQuestion,
-                          style: Theme.of(context).textTheme.headlineMedium,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                    child: Center(
+                      child: Text(
+                        AppStrings.askQuestion,
+                        style: Theme.of(context).textTheme.headlineMedium,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                   _buildSendMessageSection(),

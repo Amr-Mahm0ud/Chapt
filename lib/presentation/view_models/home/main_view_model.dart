@@ -91,6 +91,8 @@ class MainViewModel extends BaseViewModel
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(AppPadding.p10),
+                margin: const EdgeInsets.only(
+                    bottom: AppPadding.p10, top: AppPadding.p5),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.background,
                   borderRadius: BorderRadius.circular(AppValues.v10),
@@ -106,21 +108,21 @@ class MainViewModel extends BaseViewModel
             return '';
           },
           onNonMatch: (normalText) {
-            spans.add(
-              Text(
-                normalText,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            );
+            normalText = normalText.trim();
+            if (normalText.isNotEmpty) {
+              spans.add(
+                Text(
+                  normalText,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              );
+            }
             return '';
           },
         );
         return '';
       },
     );
-    for (var element in spans) {
-      print(element);
-    }
     return spans;
   }
   //************************************************************* */

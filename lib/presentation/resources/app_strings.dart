@@ -9,6 +9,7 @@ class AppStrings {
   static const skip = 'Skip';
   static const next = 'Next';
   static const cont = 'Continue';
+  static const guest = 'Try As Guest';
 
   //login texts
   static const loginText1 = 'Welcome Back';

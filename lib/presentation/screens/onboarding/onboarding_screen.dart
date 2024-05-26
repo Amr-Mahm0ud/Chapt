@@ -95,7 +95,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: AppPadding.p30),
+                padding: const EdgeInsets.symmetric(
+                  vertical: AppPadding.p30,
+                  horizontal: AppPadding.p30,
+                ),
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: AppValues.i300),
                   child: _viewModel.currentIndex == _pageController.initialPage
@@ -129,13 +132,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ),
                           ],
                         )
-                      : AppButton(
-                          action: () {
-                            Navigator.pushReplacementNamed(
-                                context, Routes.signup);
-                          },
-                          content: const Text(AppStrings.cont),
-                          rounded: true,
+                      : Column(
+                          children: [
+                            SizedBox(
+                              width: double.infinity,
+                              child: AppButton(
+                                action: () {
+                                  Navigator.pushReplacementNamed(
+                                      context, Routes.signup);
+                                },
+                                content: const Text(AppStrings.cont),
+                                rounded: true,
+                              ),
+                            ),
+                            const SizedBox(height: AppValues.v10),
+                            SizedBox(
+                              width: double.infinity,
+                              child: AppButton(
+                                action: () {
+                                  Navigator.pushReplacementNamed(
+                                      context, Routes.home);
+                                },
+                                color: Theme.of(context).colorScheme.secondary,
+                                content: const Text(AppStrings.guest),
+                                rounded: true,
+                              ),
+                            ),
+                          ],
                         ),
                 ),
               ),
