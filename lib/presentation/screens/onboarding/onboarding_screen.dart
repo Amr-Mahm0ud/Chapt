@@ -145,7 +145,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 rounded: true,
                               ),
                             ),
-                            const SizedBox(height: AppValues.v10),
+                            const SizedBox(height: AppValues.v15),
                             SizedBox(
                               width: double.infinity,
                               child: AppButton(
@@ -154,7 +154,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                       context, Routes.home);
                                 },
                                 color: Theme.of(context).colorScheme.secondary,
-                                content: const Text(AppStrings.guest),
+                                content: Text(
+                                  AppStrings.guest,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .color),
+                                ),
                                 rounded: true,
                               ),
                             ),
