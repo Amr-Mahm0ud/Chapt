@@ -8,7 +8,7 @@ import '../../resources/values_manager.dart';
 
 Widget AppBlurEffect({required child}) {
   return BackdropFilter(
-    filter: ImageFilter.blur(sigmaX: AppValues.v10, sigmaY: AppValues.v10),
+    filter: ImageFilter.blur(sigmaX: AppValues.v50, sigmaY: AppValues.v50),
     child: child,
   );
 }
