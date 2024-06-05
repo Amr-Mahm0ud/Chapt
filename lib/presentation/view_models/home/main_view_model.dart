@@ -63,7 +63,6 @@ class MainViewModel extends BaseViewModel
   // ******************************
 
   List<Widget> formatText(String text, context) {
-    text = text.replaceAll('\n\n', '\n');
     RegExp regex = RegExp(r'\*\*(.*?)\*\*');
     //to add every splited text
     List<Widget> spans = [];
@@ -108,6 +107,8 @@ class MainViewModel extends BaseViewModel
             return '';
           },
           onNonMatch: (normalText) {
+            normalText = normalText.replaceAll('*', '');
+            normalText = normalText.replaceAll('\n ', '\n');
             normalText = normalText.trim();
             if (normalText.isNotEmpty) {
               spans.add(
